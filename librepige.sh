@@ -27,12 +27,16 @@ then
     printf "\nImpossible de 'sudo', abandon.\n"
 fi
 
-
 ######################## Environnement ########################
+
+printf "\n\n************ 🚀  Mise à jour et installation des basiques **************\n\n"
 
 export DEBIAN_FRONTEND=noninteractive
 cd
-printf "\n\n************ Mise à jour et installation des basiques **************\n"
+sudo chmod go+rx .
+PIGE_RACINE="$HOME/pige"
+mkdir $PIGE_RACINE
+chmod go+rw $PIGE_RACINE
 
 ARCH="$(dpkg --print-architecture)" # amd64, arm, etc.
 source /etc/os-release # on va utiliser ID et VERSION_CODENAME
@@ -42,7 +46,6 @@ then
     # on active "non-free", car Liquidsoap a besoin de libfdk-aac2 même si on ne va pas s'en servir
     sudo apt install -y software-properties-common
     sudo apt-add-repository non-free
-    sudo apt-get update
 fi
 
 sudo apt-get update
@@ -52,6 +55,8 @@ sudo apt install -y curl wget ffmpeg
 ######################## Les vraies fonctions  ########################
 
 install_liquidsoap() {
+    printf "\n\n************ 🧴  Installation de LiquidSoap ************\n\n"
+
     # bricolage instable mais fonctionnel
     local LATEST=$(curl -w '%{redirect_url}' https://github.com/savonet/liquidsoap/releases/latest)
     local ASSETS_URL=${LATEST/tag/expanded_assets}
@@ -66,4 +71,27 @@ install_liquidsoap() {
     liquidsoap --version
 }
 
+install_pige() {
+    printf "\n\n************ 📻  Installation du service de pige ************\n\n"
+    echo "TODO"
+}
+
+install_apache() {
+    printf "\n\n************ 🪶  Installation d'Apache ************\n\n"
+    echo "TODO, cf. Debian wiki"
+}
+
+install_samba() {
+    printf "\n\n************ 🪟  Installation de Samba ************\n\n"
+    echo "TODO"
+}
+
 install_liquidsoap
+install_pige
+install_apache
+install_samba
+
+printf "\n\n\n\n\n✨ ✨ ✨ ✨ ✨ ✨ 🏁 Tout est installé 🏁 ✨ ✨ ✨ ✨ ✨ ✨n\n\n\n\n"
+printf "`tput bold`⚠️   REDEMARRAGE de la machine dans 10s (appuyez sur Ctrl+C pour annuler)...\n\n"
+sleep 10s
+sudo reboot

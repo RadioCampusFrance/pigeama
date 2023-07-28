@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-########################  LibrePige ########################
+########################  PigeAMA ########################
 #
 #   Copyright © Martin Kirchgessner <martin.kirch@gmail.com>
 #
@@ -24,10 +24,10 @@ then
 fi
 if [[ ! "$(which dpkg)" ]]
 then
-    printf "\n\nLibrePige ne fonctionne qu'avec Debian ou dérivées (Ubuntu, etc.).\n\n"
+    printf "\n\nPigeAMA ne fonctionne qu'avec Debian ou dérivées (Ubuntu, etc.).\n\n"
     exit 1
 fi
-printf "LibrePige a besoin des droits d'administration (sudo) :\n"
+printf "PigeAMA a besoin des droits d'administration (sudo) :\n"
 if ! sudo -v
 then
     printf "\nImpossible de 'sudo', abandon.\n"

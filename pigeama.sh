@@ -194,15 +194,16 @@ install_apache() {
 read -r -d '' __CONF_SAMBA << END
 [global]
 workgroup = PIGE
-map to guest = Bad User
 log file = /var/log/samba/%m
 log level = 1
 server role = standalone server
+map to guest = bad dser
 
 [guest]
 path = $PIGE_RACINE
 read only = yes
 guest ok = yes
+browseable = yes
 
 END
 

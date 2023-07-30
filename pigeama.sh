@@ -10,7 +10,7 @@
 # Age maximum (en jours) des fichiers/dossiers dans la pige
 ${NBJOURS:=31}
 
-# Format des fichiers de pige: utiliser flac|wav|ogg
+# Format des fichiers de pige: utiliser mp3|flac|wav|ogg
 ${FORMATPIGE:=flac}
 
 
@@ -36,7 +36,12 @@ fi
 
 ######################## Environnement ########################
 
-printf "\n\n************ 🚀  Mise à jour et installation des basiques **************\n\n"
+message() {
+    printf "$@" | tee -a installation.log
+}
+
+message "Lancement de pigeama.sh: `date`\n"
+message "\n\n************ 🚀  Mise à jour et installation des basiques **************\n\n"
 
 export DEBIAN_FRONTEND=noninteractive
 cd
@@ -63,7 +68,7 @@ sudo apt install -y curl wget ffmpeg
 ######################## Les vraies fonctions et contenus ########################
 
 install_liquidsoap() {
-    printf "\n\n************ 🧴  Installation de LiquidSoap ************\n\n"
+    message "\n\n************ 🧴  Installation de LiquidSoap ************\n\n"
 
     # bricolage instable mais fonctionnel
     local LATEST=$(curl -w '%{redirect_url}' https://github.com/savonet/liquidsoap/releases/latest)
@@ -71,12 +76,11 @@ install_liquidsoap() {
     wget -nd -r -l 1 -R '*dbgsym*' -A "liquidsoap*$ID*$VERSION_CODENAME*$ARCH.deb" "$ASSETS_URL"
 
     local PACKAGE=$(ls -tr liquidsoap*.deb |tail)
-    printf "\n\n************ Téléchargé: $PACKAGE **************\n"
+    message "\n\n************ Téléchargé: $PACKAGE **************\n"
 
     sudo apt install -y --install-recommends ./$PACKAGE
 
-    printf "\n\n************ Installé: "
-    liquidsoap --version
+    message "\n\n************ Installé: `liquidsoap --version`\n"
 }
 
 
@@ -140,7 +144,7 @@ WantedBy=default.target
 END
 
 install_pige() {
-    printf "\n\n************ 📻  Installation du service de pige ************\n\n"
+    message "\n\n************ 📻  Installation du service de pige ************\n\n"
 
     mkdir -p "$HOME/.config/systemd/user/"
 
@@ -171,7 +175,7 @@ DocumentRoot $PIGE_RACINE
 END
 
 install_apache() {
-    printf "\n\n************ 🪶  Installation d'Apache ************\n\n"
+    message "\n\n************ 🪶  Installation d'Apache ************\n\n"
     sudo apt install -y apache2
     sudo echo "$__CONF_APACHE" > /etc/apache2/sites-available/000-default.conf
     # TODO sudo ufw allow 'WWW' ?
@@ -194,7 +198,7 @@ guest ok = yes
 END
 
 install_samba() {
-    printf "\n\n************ 🪟  Installation de Samba ************\n\n"
+    message "\n\n************ 🪟  Installation de Samba ************\n\n"
     sudo apt install -y samba samba-client
     sudo echo "$__CONF_SAMBA" > /etc/samba/smb.conf
 }
@@ -205,7 +209,7 @@ install_pige
 install_apache
 install_samba
 
-printf "\n\n\n\n\n✨ ✨ ✨ ✨ ✨ ✨ 🏁 Tout est installé 🏁 ✨ ✨ ✨ ✨ ✨ ✨n\n\n\n\n"
-printf "`tput bold`⚠️   REDEMARRAGE de la machine dans 10s (appuyez sur Ctrl+C pour annuler)...\n\n"
+message "\n\n\n\n\n✨ ✨ ✨ ✨ ✨ ✨ 🏁 Tout est installé 🏁 ✨ ✨ ✨ ✨ ✨ ✨n\n\n\n\n"
+message "`tput bold`⚠️   REDEMARRAGE de la machine dans 10s (appuyez sur Ctrl+C pour annuler)...\n\n"
 sleep 10s
 sudo reboot

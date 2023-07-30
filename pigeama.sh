@@ -122,7 +122,6 @@ read -r -d '' __NETTOYEUR_SCRIPT << END
 #!/bin/bash
 find $PIGE_RACINE/* -type f -mtime $NBJOURS -delete
 find $PIGE_RACINE -type d -empty -delete
-sleep 1h
 
 END
 
@@ -130,18 +129,27 @@ END
 read -r -d '' __NETTOYEUR_SERVICE << END
 [Unit]
 Description=Nettoyage de la pige d'antenne
-After=network.target
 
 [Service]
 Type=simple
-Restart=always
-WorkingDirectory=$HOME
 ExecStart=$HOME/nettoyeur_pige.sh
 
+END
+
+
+read -r -d '' __NETTOYEUR_TIMER << END
+[Unit]
+Description=Nettoyage de la pige d'antenne
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+
 [Install]
-WantedBy=default.target
+WantedBy=timers.target
 
 END
+
 
 install_pige() {
     message "\n\n************ 📻  Installation du service de pige ************\n\n"
@@ -153,11 +161,12 @@ install_pige() {
 
     echo "$__NETTOYEUR_SCRIPT" > "$HOME/nettoyeur_pige.sh"
     echo "$__NETTOYEUR_SERVICE" > "$HOME/.config/systemd/user/nettoyeur_pige.service"
+    echo "$__NETTOYEUR_TIMER" > "$HOME/.config/systemd/user/nettoyeur_pige.timer"
 
     systemctl --user daemon-reload
     loginctl enable-linger
     systemctl --user enable pige
-    systemctl --user enable nettoyeur_pige
+    systemctl --user enable nettoyeur_pige.timer
 }
 
 

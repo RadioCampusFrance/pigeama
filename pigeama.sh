@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 
-########################  PigeAMA ########################
-#
-#   Copyright © Martin Kirchgessner <martin.kirch@gmail.com>
-#
+######################## 🦄 PigeAMA 🖭 ##########################
+#                                                               #
+# Encore et toujours distribué sans garantie, conformément à la #
+#              WTFPL : http://www.wtfpl.net/                    #
+#                                                               #
+#################################################################
+
 
 ######################## Paramètres ########################
 

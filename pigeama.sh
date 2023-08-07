@@ -16,6 +16,8 @@ ${NBJOURS:=31}
 # Format des fichiers de pige: utiliser mp3|flac|wav|ogg
 ${FORMATPIGE:=flac}
 
+# Peut être fourni pour essayer avec une autre version de Liquidsoap
+${VERSION_LS:=2.2.0}
 
 ######################## Pré-requis ########################
 set -o errexit
@@ -74,11 +76,16 @@ install_liquidsoap() {
     message "\n\n************ 🧴  Installation de LiquidSoap ************\n\n"
 
     # bricolage instable mais fonctionnel
-    local LATEST=$(curl -w '%{redirect_url}' https://github.com/savonet/liquidsoap/releases/latest)
+    local LATEST=$(curl -w '%{redirect_url}' https://github.com/savonet/liquidsoap/releases/tag/v$VERSION_LS)
     local ASSETS_URL=${LATEST/tag/expanded_assets}
-    wget -nd -r -l 1 -R '*dbgsym*' -A "liquidsoap*$ID*$VERSION_CODENAME*$ARCH.deb" "$ASSETS_URL"
+    wget -nd -r -l 1 -R '*dbgsym*' -A "liquidsoap_*$ID*$VERSION_CODENAME*$ARCH.deb" "$ASSETS_URL"
 
     local PACKAGE=$(ls -tr liquidsoap*.deb |tail)
+    if [ "$PACKAGE" = "" ];
+    then
+	    printf "\n\n⚠️  Impossible d'installer Liquidsoap pour votre système ($ID $VERSION_CODENAME) ou architecture ($ARCH).\n\n"
+	    exit 1
+    fi
     message "\n\n************ Téléchargé: $PACKAGE **************\n"
 
     sudo apt install -y --install-recommends ./$PACKAGE

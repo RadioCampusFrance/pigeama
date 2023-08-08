@@ -20,7 +20,7 @@
 : "${VERSION_LS:=2.2.0}"
 
 ######################## Pré-requis ########################
-set -o errexit
+# set -o errexit plus bas
 set -o nounset
 set -o pipefail
 if [[ "${DEBUG-0}" == "1" ]] # ajoutez DEBUG=1 pour avoir plus de traces d'erreur
@@ -48,7 +48,7 @@ fi
 
 ######################## Environnement ########################
 
-message "\n\n************ 🚀  Mise à jour et installation des basiques **************\n\n"
+message "\n\n************ 🚀  Installation des basiques **************\n\n"
 
 export DEBIAN_FRONTEND=noninteractive
 cd
@@ -67,20 +67,10 @@ then
     sudo apt-add-repository non-free
 fi
 
-sudo apt update
-sudo apt-get -q -y dist-upgrade
+sudo apt-get -q install -y curl wget ffmpeg
 
-install_if_not_installed() {
-    if [ $(dpkg-query -W -f='${Status}' $1 2>/dev/null | grep -c "ok installed") -eq 0 ];
-    then
-    apt-get -q install -y $1;
-    fi
-}
-
-install_if_not_installed curl
-install_if_not_installed wget
-install_if_not_installed ffmpeg
-
+# seulement maintenant car apt-get a tendance a retourner 1 quand il n'y a rien à faire
+set -o errexit
 
 ######################## Les vraies fonctions et contenus ########################
 

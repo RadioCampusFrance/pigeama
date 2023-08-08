@@ -27,12 +27,19 @@ if [[ "${DEBUG-0}" == "1" ]] # ajoutez DEBUG=1 pour avoir plus de traces d'erreu
 then
     set -o xtrace
 fi
+
+message() {
+    printf "$@" | tee -a installation.log
+}
+
+message "Lancement de pigeama.sh: `date`\n"
+
 if [[ ! "$(which dpkg)" ]]
 then
     printf "\n\nPigeAMA ne fonctionne qu'avec Debian ou dérivées (Ubuntu, etc.).\n\n"
     exit 1
 fi
-printf "PigeAMA a besoin des droits d'administration (sudo) :\n"
+printf "PigeAMA a besoin des droits d'administration (sudo), il est possible que le mot de passe vous soit demandé régulièrement.\n"
 if ! sudo -v
 then
     printf "\nImpossible de 'sudo', abandon.\n"
@@ -41,11 +48,6 @@ fi
 
 ######################## Environnement ########################
 
-message() {
-    printf "$@" | tee -a installation.log
-}
-
-message "Lancement de pigeama.sh: `date`\n"
 message "\n\n************ 🚀  Mise à jour et installation des basiques **************\n\n"
 
 export DEBIAN_FRONTEND=noninteractive
@@ -61,13 +63,23 @@ source /etc/os-release # on va utiliser ID et VERSION_CODENAME
 if [[ "$ID" == "debian" ]]
 then
     # on active "non-free", car Liquidsoap a besoin de libfdk-aac2 même si on ne va pas s'en servir
-    sudo apt-get install -y software-properties-common
+    sudo apt-get install -q -y software-properties-common
     sudo apt-add-repository non-free
 fi
 
 sudo apt update
-sudo apt-get -y upgrade
-sudo apt-get install -y curl wget ffmpeg
+sudo apt-get -q -y dist-upgrade
+
+install_if_not_installed() {
+    if [ $(dpkg-query -W -f='${Status}' $1 2>/dev/null | grep -c "ok installed") -eq 0 ];
+    then
+    apt-get -q install -y $1;
+    fi
+}
+
+install_if_not_installed curl
+install_if_not_installed wget
+install_if_not_installed ffmpeg
 
 
 ######################## Les vraies fonctions et contenus ########################

@@ -11,13 +11,13 @@
 ######################## Paramètres ########################
 
 # Age maximum (en jours) des fichiers/dossiers dans la pige
-${NBJOURS:=31}
+: "${NBJOURS:=31}"
 
 # Format des fichiers de pige: utiliser mp3|flac|wav|ogg
-${FORMATPIGE:=flac}
+: "${FORMATPIGE:=flac}"
 
 # Peut être fourni pour essayer avec une autre version de Liquidsoap
-${VERSION_LS:=2.2.0}
+: "${VERSION_LS:=2.2.0}"
 
 ######################## Pré-requis ########################
 set -o errexit

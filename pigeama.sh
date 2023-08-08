@@ -61,13 +61,13 @@ source /etc/os-release # on va utiliser ID et VERSION_CODENAME
 if [[ "$ID" == "debian" ]]
 then
     # on active "non-free", car Liquidsoap a besoin de libfdk-aac2 même si on ne va pas s'en servir
-    sudo apt install -y software-properties-common
+    sudo apt-get install -y software-properties-common
     sudo apt-add-repository non-free
 fi
 
 sudo apt update
-sudo apt -y upgrade
-sudo apt install -y curl wget ffmpeg
+sudo apt-get -y upgrade
+sudo apt-get install -y curl wget ffmpeg
 
 
 ######################## Les vraies fonctions et contenus ########################
@@ -88,7 +88,7 @@ install_liquidsoap() {
     fi
     message "\n\n************ Téléchargé: $PACKAGE **************\n"
 
-    sudo apt install -y --install-recommends ./$PACKAGE
+    sudo apt-get install -y --install-recommends ./$PACKAGE
 
     message "\n\n************ Installé: `liquidsoap --version`\n"
 }

@@ -52,7 +52,7 @@ export DEBIAN_FRONTEND=noninteractive
 cd
 sudo chmod go+rx .
 PIGE_RACINE="$HOME/pige"
-mkdir $PIGE_RACINE
+mkdir -p $PIGE_RACINE
 chmod go+rw $PIGE_RACINE
 
 ARCH="$(dpkg --print-architecture)" # amd64, arm, etc.

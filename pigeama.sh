@@ -90,12 +90,7 @@ install_liquidsoap() {
 }
 
 
-install_pige() {
-    printf "\n\n************ 📻  Installation du service de pige ************\n\n"
-
-    mkdir -p "$HOME/.config/systemd/user/"
-
-    cat > "$HOME/pige.liq" << END
+__PIGE_SCRIPT=$(cat << END
 settings.log.file.set(true)
 settings.log.file.path.set("$HOME/pige.log")
 settings.init.daemon.set(true)
@@ -109,8 +104,9 @@ output.file(%$FORMATPIGE,
 )
 
 END
+)
 
-    cat > "$HOME/.config/systemd/user/pige.service" << END
+__PIGE_SERVICE=$(cat << END
 [Unit]
 Description=Pige d'antenne
 After=network.target
@@ -126,15 +122,17 @@ Restart=always
 WantedBy=default.target
 
 END
+)
 
-    cat > "$HOME/nettoyeur_pige.sh" << END
+__NETTOYEUR_SCRIPT=$(cat << END
 #!/bin/bash
 find $PIGE_RACINE/* -type f -mtime $NBJOURS -delete
 find $PIGE_RACINE -type d -empty -delete
 
 END
+)
 
-    cat > "$HOME/.config/systemd/user/nettoyeur_pige.service" << END
+__NETTOYEUR_SERVICE=$(cat << END
 [Unit]
 Description=Nettoyage de la pige d'antenne
 
@@ -143,8 +141,9 @@ Type=simple
 ExecStart=$HOME/nettoyeur_pige.sh
 
 END
+)
 
-    cat > "$HOME/.config/systemd/user/nettoyeur_pige.timer" << END
+__NETTOYEUR_TIMER=$(cat << END
 [Unit]
 Description=Nettoyage de la pige d'antenne
 
@@ -156,6 +155,19 @@ Persistent=true
 WantedBy=timers.target
 
 END
+)
+
+install_pige() {
+    printf "\n\n************ 📻  Installation du service de pige ************\n\n"
+
+    mkdir -p "$HOME/.config/systemd/user/"
+
+    echo "$__PIGE_SCRIPT" > "$HOME/pige.liq"
+    echo "$__PIGE_SERVICE" > "$HOME/.config/systemd/user/pige.service"
+
+    echo "$__NETTOYEUR_SCRIPT" > "$HOME/nettoyeur_pige.sh"
+    echo "$__NETTOYEUR_SERVICE" > "$HOME/.config/systemd/user/nettoyeur_pige.service"
+    echo "$__NETTOYEUR_TIMER" > "$HOME/.config/systemd/user/nettoyeur_pige.timer"
 
     systemctl --user daemon-reload
     loginctl enable-linger
@@ -164,11 +176,7 @@ END
 }
 
 
-
-install_apache() {
-    printf "\n\n************ 🪶  Installation d'Apache ************\n\n"
-    sudo apt install -y apache2
-    sudo cat > /etc/apache2/sites-available/000-default.conf << END
+__CONF_APACHE=$(cat << END
 ServerName pige.local
 
 <Directory $PIGE_RACINE>
@@ -180,14 +188,17 @@ ServerName pige.local
 DocumentRoot $PIGE_RACINE
 
 END
+)
+
+install_apache() {
+    printf "\n\n************ 🪶  Installation d'Apache ************\n\n"
+    sudo apt install -y apache2
+    sudo echo "$__CONF_APACHE" > /etc/apache2/sites-available/000-default.conf
     # TODO sudo ufw allow 'WWW' ?
 }
 
 
-install_samba() {
-    printf "\n\n************ 🪟  Installation de Samba ************\n\n"
-    sudo apt install -y samba samba-client
-    sudo cat > /etc/samba/smb.conf << END
+__CONF_SAMBA=$(cat << END
 [global]
 workgroup = PIGE
 netbios name = PIGE
@@ -203,6 +214,12 @@ guest ok = yes
 browseable = yes
 
 END
+)
+
+install_samba() {
+    printf "\n\n************ 🪟  Installation de Samba ************\n\n"
+    sudo apt install -y samba samba-client
+    sudo echo "$__CONF_SAMBA" > /etc/samba/smb.conf
 }
 
 

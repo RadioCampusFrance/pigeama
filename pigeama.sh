@@ -110,7 +110,7 @@ settings.init.daemon.pidfile.set(true)
 settings.init.daemon.pidfile.path.set("$HOME/pige.pid")
 
 output.file(%$FORMATPIGE,
-    "$PIGE_RACINE/%Y-%m-%d/%Hh%M_%S.$FORMATPIGE",
+    {time.string("$PIGE_RACINE/%Y-%m-%d/%Hh%M_%S.$FORMATPIGE")},
     input.alsa(),
     reopen_when = {0m}
 )

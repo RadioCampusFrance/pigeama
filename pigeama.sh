@@ -20,7 +20,7 @@
 : "${VERSION_LS:=2.2.0}"
 
 ######################## Pré-requis ########################
-# set -o errexit plus bas
+set -o errexit
 set -o nounset
 set -o pipefail
 if [[ "${DEBUG-0}" == "1" ]] # ajoutez DEBUG=1 pour avoir plus de traces d'erreur
@@ -69,9 +69,6 @@ fi
 
 sudo apt-get -q install -y curl wget ffmpeg
 
-# seulement maintenant car apt-get a tendance a retourner 1 quand il n'y a rien à faire
-set -o errexit
-
 ######################## Les vraies fonctions et contenus ########################
 
 install_liquidsoap() {
@@ -96,7 +93,7 @@ install_liquidsoap() {
 }
 
 
-read -r -d '' __PIGE_SCRIPT << END
+__PIGE_SCRIPT=$(cat << END
 settings.log.file.set(true)
 settings.log.file.path.set("$HOME/pige.log")
 settings.init.daemon.set(true)
@@ -110,9 +107,9 @@ output.file(%$FORMATPIGE,
 )
 
 END
+)
 
-
-read -r -d '' __PIGE_SERVICE << END
+__PIGE_SERVICE=$(cat << END
 [Unit]
 Description=Pige d'antenne
 After=network.target
@@ -128,17 +125,17 @@ Restart=always
 WantedBy=default.target
 
 END
+)
 
-
-read -r -d '' __NETTOYEUR_SCRIPT << END
+__NETTOYEUR_SCRIPT=$(cat << END
 #!/bin/bash
 find $PIGE_RACINE/* -type f -mtime $NBJOURS -delete
 find $PIGE_RACINE -type d -empty -delete
 
 END
+)
 
-
-read -r -d '' __NETTOYEUR_SERVICE << END
+__NETTOYEUR_SERVICE=$(cat << END
 [Unit]
 Description=Nettoyage de la pige d'antenne
 
@@ -147,9 +144,9 @@ Type=simple
 ExecStart=$HOME/nettoyeur_pige.sh
 
 END
+)
 
-
-read -r -d '' __NETTOYEUR_TIMER << END
+__NETTOYEUR_TIMER=$(cat << END
 [Unit]
 Description=Nettoyage de la pige d'antenne
 
@@ -161,7 +158,7 @@ Persistent=true
 WantedBy=timers.target
 
 END
-
+)
 
 install_pige() {
     message "\n\n************ 📻  Installation du service de pige ************\n\n"
@@ -182,7 +179,7 @@ install_pige() {
 }
 
 
-read -r -d '' __CONF_APACHE << END
+__CONF_APACHE=$(cat << END
 ServerName pige.local
 
 <Directory $PIGE_RACINE>
@@ -194,6 +191,7 @@ ServerName pige.local
 DocumentRoot $PIGE_RACINE
 
 END
+)
 
 install_apache() {
     message "\n\n************ 🪶  Installation d'Apache ************\n\n"
@@ -203,7 +201,7 @@ install_apache() {
 }
 
 
-read -r -d '' __CONF_SAMBA << END
+__CONF_SAMBA=$(cat << END
 [global]
 workgroup = PIGE
 log file = /var/log/samba/%m
@@ -218,6 +216,7 @@ guest ok = yes
 browseable = yes
 
 END
+)
 
 install_samba() {
     message "\n\n************ 🪟  Installation de Samba ************\n\n"

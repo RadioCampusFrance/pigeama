@@ -190,12 +190,13 @@ install_samba() {
     sudo cat > /etc/samba/smb.conf << END
 [global]
 workgroup = PIGE
+netbios name = PIGE
 log file = /var/log/samba/%m
 log level = 1
 server role = standalone server
 map to guest = bad dser
 
-[guest]
+[PIGE]
 path = $PIGE_RACINE
 read only = yes
 guest ok = yes
@@ -209,6 +210,7 @@ install_liquidsoap
 install_pige
 install_apache
 install_samba
+sudo hostnamectl set-hostname pige
 
 printf "\n\n\n\n\n✨ ✨ ✨ ✨ ✨ ✨ 🏁 Tout est installé 🏁 ✨ ✨ ✨ ✨ ✨ ✨n\n\n\n\n"
 printf "`tput bold`⚠️   REDEMARRAGE de la machine dans 10s (appuyez sur Ctrl+C pour annuler)...\n\n"

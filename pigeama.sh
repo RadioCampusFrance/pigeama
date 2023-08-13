@@ -193,7 +193,7 @@ END
 install_apache() {
     printf "\n\n************ 🪶  Installation d'Apache ************\n\n"
     sudo apt install -y apache2
-    sudo echo "$__CONF_APACHE" > /etc/apache2/sites-available/000-default.conf
+    echo "$__CONF_APACHE" | sudo dd of=/etc/apache2/sites-available/000-default.conf
     # TODO sudo ufw allow 'WWW' ?
 }
 
@@ -219,7 +219,7 @@ END
 install_samba() {
     printf "\n\n************ 🪟  Installation de Samba ************\n\n"
     sudo apt install -y samba samba-client
-    sudo echo "$__CONF_SAMBA" > /etc/samba/smb.conf
+    echo "$__CONF_SAMBA" | sudo dd of=/etc/samba/smb.conf
 }
 
 

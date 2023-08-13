@@ -20,7 +20,7 @@
 : "${VERSION_LS:=2.2.0}"
 
 ######################## Pré-requis ########################
-# set -o errexit plus bas
+set -o errexit
 set -o nounset
 set -o pipefail
 if [[ "${DEBUG-0}" == "1" ]] # ajoutez DEBUG=1 pour avoir plus de traces d'erreur
@@ -50,6 +50,13 @@ fi
 
 message "\n\n************ 🚀  Installation des basiques **************\n\n"
 
+install_if_missing() {
+    if $(dpkg-query -W -f='${Status}' $1 2>/dev/null | grep "ok installed")
+    then
+        sudo apt-get install -q -y $1;
+    fi
+}
+
 export DEBIAN_FRONTEND=noninteractive
 cd
 sudo chmod go+rx .
@@ -63,14 +70,13 @@ source /etc/os-release # on va utiliser ID et VERSION_CODENAME
 if [[ "$ID" == "debian" ]]
 then
     # on active "non-free", car Liquidsoap a besoin de libfdk-aac2 même si on ne va pas s'en servir
-    sudo apt-get install -q -y software-properties-common
+    install_if_missing software-properties-common
     sudo apt-add-repository non-free
 fi
 
-sudo apt-get -q install -y curl wget ffmpeg
-
-# seulement maintenant car apt-get a tendance a retourner 1 quand il n'y a rien à faire
-set -o errexit
+install_if_missing curl
+install_if_missing wget
+install_if_missing ffmpeg
 
 ######################## Les vraies fonctions et contenus ########################
 
@@ -197,7 +203,7 @@ END
 
 install_apache() {
     message "\n\n************ 🪶  Installation d'Apache ************\n\n"
-    sudo apt install -y apache2
+    install_if_missing apache2
     sudo echo "$__CONF_APACHE" > /etc/apache2/sites-available/000-default.conf
     # TODO sudo ufw allow 'WWW' ?
 }
@@ -221,7 +227,8 @@ END
 
 install_samba() {
     message "\n\n************ 🪟  Installation de Samba ************\n\n"
-    sudo apt install -y samba samba-client
+    install_if_missing samba
+    install_if_missing samba-client
     sudo echo "$__CONF_SAMBA" > /etc/samba/smb.conf
 }
 

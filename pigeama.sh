@@ -72,14 +72,14 @@ install_liquidsoap() {
     printf "\n\n************ 🧴  Installation de LiquidSoap ************\n\n"
 
     # bricolage instable mais fonctionnel
-    local LATEST=$(curl -w '%{redirect_url}' https://github.com/savonet/liquidsoap/releases/tag/v$VERSION_LS)
-    local ASSETS_URL=${LATEST/tag/expanded_assets}
+    local ASSETS_URL="https://github.com/savonet/liquidsoap/releases/expanded_assets/v$LATEST"
     wget -nd -r -l 1 -R '*dbgsym*' -A "liquidsoap_*$ID*$VERSION_CODENAME*$ARCH.deb" "$ASSETS_URL"
 
     local PACKAGE=$(ls -tr liquidsoap*.deb |tail)
     if [ "$PACKAGE" = "" ];
     then
-	    printf "\n\n⚠️  Impossible d'installer Liquidsoap pour votre système ($ID $VERSION_CODENAME) ou architecture ($ARCH).\n\n"
+	    printf "\n\n⚠️  Impossible de trouver un paquet Liquidsoap pour votre système ($ID $VERSION_CODENAME) ou architecture ($ARCH).\n"
+        printf "Vérifiez qu'il est dans la liste sur $ASSETS_URL\n"
 	    exit 1
     fi
     printf "\n\n************ Téléchargé: $PACKAGE **************\n"

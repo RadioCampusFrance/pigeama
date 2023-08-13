@@ -72,7 +72,7 @@ install_liquidsoap() {
     printf "\n\n************ 🧴  Installation de LiquidSoap ************\n\n"
 
     # bricolage instable mais fonctionnel
-    local ASSETS_URL="https://github.com/savonet/liquidsoap/releases/expanded_assets/v$LATEST"
+    local ASSETS_URL="https://github.com/savonet/liquidsoap/releases/expanded_assets/v$VERSION_LS"
     wget -nd -r -l 1 -R '*dbgsym*' -A "liquidsoap_*$ID*$VERSION_CODENAME*$ARCH.deb" "$ASSETS_URL"
 
     local PACKAGE=$(ls -tr liquidsoap*.deb |tail)

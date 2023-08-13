@@ -200,12 +200,13 @@ install_apache() {
 
 __CONF_SAMBA=$(cat << END
 [global]
-workgroup = PIGE
+# "workgroup" doit etre different de "netbios name"
+workgroup = RADIO
 netbios name = PIGE
 log file = /var/log/samba/%m
 log level = 1
 server role = standalone server
-map to guest = bad dser
+map to guest = bad user
 
 [PIGE]
 path = $PIGE_RACINE

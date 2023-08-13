@@ -155,7 +155,7 @@ Persistent=true
 [Install]
 WantedBy=timers.target
 
-END 
+END
 
     systemctl --user daemon-reload
     loginctl enable-linger

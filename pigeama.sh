@@ -61,7 +61,7 @@ if [[ "$ID" == "debian" ]]
 then
     # on active "non-free", car Liquidsoap a besoin de libfdk-aac2 même si on ne va pas s'en servir
     sudo apt-get install -q -y software-properties-common
-    sudo apt-add-repository non-free
+    sudo apt-add-repository -y non-free
 fi
 
 sudo apt-get -q install -y curl wget ffmpeg

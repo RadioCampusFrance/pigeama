@@ -62,6 +62,7 @@ then
     # on active "non-free", car Liquidsoap a besoin de libfdk-aac2 même si on ne va pas s'en servir
     sudo apt-get install -q -y software-properties-common
     sudo apt-add-repository -y non-free
+    sudo apt-get update
 fi
 
 sudo apt-get -q install -y curl wget ffmpeg

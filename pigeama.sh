@@ -14,7 +14,7 @@
 # Age maximum (en jours) des fichiers/dossiers dans la pige
 : "${NBJOURS:=31}"
 
-# Format des fichiers de pige: utiliser mp3|flac|wav|ogg
+# Format des fichiers de pige: utiliser mp3|flac|wav
 : "${FORMATPIGE:=mp3}"
 
 # Peut être fourni pour essayer avec une autre version de Liquidsoap
@@ -99,10 +99,10 @@ case "$FORMATPIGE" in
         EXTENSION="wav"
         ENCODAGE="wav"
         ;;
-    ogg)
-        EXTENSION="ogg"
-        ENCODAGE="vorbis(samplerate=44100, channels=2, quality=0.3)"
-        ;;
+    # ogg)  # HS avec Liquidsoap2.2.1 - essayer avec %ffmpeg ?
+    #     EXTENSION="ogg"
+    #     ENCODAGE="vorbis(samplerate=44100, channels=2, quality=0.3)"
+    #     ;;
     *) # dans le doute, mp3 !
         EXTENSION="mp3"
         ENCODAGE="mp3(bitrate=128)"

@@ -157,6 +157,26 @@ WantedBy=timers.target
 END
 )
 
+__LOGROTATE=$(cat << END
+$HOME/pige*.log {
+  compress
+  rotate 10
+  size 10M
+  missingok
+  notifempty
+  sharedscripts
+  postrotate
+    for liq in $HOME/pige*.pid ; do
+      if test \$liq != '$HOME/pige*.pid' ; then
+        kill -s USR1 $(cat \$liq)
+      fi
+    done
+  endscript
+}
+
+END
+)
+
 install_pige() {
     printf "\n\n************ 📻  Installation du service de pige ************\n\n"
 
@@ -164,6 +184,7 @@ install_pige() {
 
     echo "$__PIGE_SCRIPT" > "$HOME/pige.liq"
     echo "$__PIGE_SERVICE" > "$HOME/.config/systemd/user/pige.service"
+    echo "$__LOGROTATE" > /etc/logrotate.d/pige
 
     echo "$__NETTOYEUR_SCRIPT" > "$HOME/nettoyeur_pige.sh"
     echo "$__NETTOYEUR_SERVICE" > "$HOME/.config/systemd/user/nettoyeur_pige.service"

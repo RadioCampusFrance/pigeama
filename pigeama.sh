@@ -15,7 +15,7 @@
 : "${NBJOURS:=31}"
 
 # Format des fichiers de pige: utiliser mp3|flac|wav|ogg
-: "${FORMATPIGE:=flac}"
+: "${FORMATPIGE:=mp3}"
 
 # Peut être fourni pour essayer avec une autre version de Liquidsoap
 : "${VERSION_LS:=2.2.1}"
@@ -90,6 +90,25 @@ install_liquidsoap() {
 }
 
 
+case "$FORMATPIGE" in
+    flac)
+        EXTENSION="flac"
+        ENCODAGE="flac"
+        ;;
+    wav)
+        EXTENSION="wav"
+        ENCODAGE="wav"
+        ;;
+    ogg)
+        EXTENSION="ogg"
+        ENCODAGE="vorbis(samplerate=44100, channels=2, quality=0.3)"
+        ;;
+    *) # dans le doute, mp3 !
+        EXTENSION="mp3"
+        ENCODAGE="mp3(bitrate=128)"
+        ;;
+esac
+
 __PIGE_SCRIPT=$(cat << END
 settings.log.file.set(true)
 settings.log.file.path.set("$HOME/pige.log")
@@ -97,8 +116,8 @@ settings.init.daemon.set(true)
 settings.init.daemon.pidfile.set(true)
 settings.init.daemon.pidfile.path.set("$HOME/pige.pid")
 
-output.file(%$FORMATPIGE,
-    {time.string("$PIGE_RACINE/%Y-%m-%d/%Hh%M_%S.$FORMATPIGE")},
+output.file(%$ENCODAGE,
+    {time.string("$PIGE_RACINE/%Y-%m-%d/%Hh%M_%S.$EXTENSION")},
     input.alsa(),
     reopen_when = {0m}
 )

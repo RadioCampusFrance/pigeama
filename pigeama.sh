@@ -18,7 +18,7 @@
 : "${FORMATPIGE:=flac}"
 
 # Peut être fourni pour essayer avec une autre version de Liquidsoap
-: "${VERSION_LS:=2.2.0}"
+: "${VERSION_LS:=2.2.1}"
 
 ######################## Pré-requis ########################
 set -o errexit

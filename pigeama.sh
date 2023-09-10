@@ -203,7 +203,7 @@ install_pige() {
 
     echo "$__PIGE_SCRIPT" > "$HOME/pige.liq"
     echo "$__PIGE_SERVICE" > "$HOME/.config/systemd/user/pige.service"
-    echo "$__LOGROTATE" > /etc/logrotate.d/pige
+    echo "$__LOGROTATE" | sudo dd of=/etc/logrotate.d/pige
 
     echo "$__NETTOYEUR_SCRIPT" > "$HOME/nettoyeur_pige.sh"
     echo "$__NETTOYEUR_SERVICE" > "$HOME/.config/systemd/user/nettoyeur_pige.service"

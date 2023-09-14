@@ -146,7 +146,7 @@ END
 
 __NETTOYEUR_SCRIPT=$(cat << END
 #!/bin/bash
-find $PIGE_RACINE/* -type f -mtime $NBJOURS -delete
+find $PIGE_RACINE/* -type f -mtime +$NBJOURS -delete
 find $PIGE_RACINE -type d -empty -delete
 
 END
@@ -188,7 +188,8 @@ $HOME/pige*.log {
   postrotate
     for liq in $HOME/pige*.pid ; do
       if test \$liq != '$HOME/pige*.pid' ; then
-        kill -s USR1 $(cat \$liq)
+        pid=`cat $liq | | tr -d '\n'`
+        kill -s USR1 $pid
       fi
     done
   endscript
@@ -207,6 +208,7 @@ install_pige() {
     echo "$__LOGROTATE" | sudo dd of=/etc/logrotate.d/pige
 
     echo "$__NETTOYEUR_SCRIPT" > "$HOME/nettoyeur_pige.sh"
+    chmod +x "$HOME/nettoyeur_pige.sh"
     echo "$__NETTOYEUR_SERVICE" > "$HOME/.config/systemd/user/nettoyeur_pige.service"
     echo "$__NETTOYEUR_TIMER" > "$HOME/.config/systemd/user/nettoyeur_pige.timer"
 

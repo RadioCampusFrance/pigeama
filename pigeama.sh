@@ -188,7 +188,7 @@ $HOME/pige*.log {
   postrotate
     for liq in $HOME/pige*.pid ; do
       if test \$liq != '$HOME/pige*.pid' ; then
-        pid=`cat $liq | | tr -d '\n'`
+        pid=`cat $liq | tr -d '\n'`
         kill -s USR1 $pid
       fi
     done

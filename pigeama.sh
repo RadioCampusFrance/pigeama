@@ -67,7 +67,7 @@ then
     do
         if [ -f "$source" ]
         then
-            sed -i '/Components: /s/$/ non-free/' "$source"
+            sudo sed -i '/Components: /s/$/ non-free/' "$source"
         fi
     done
     sudo apt-get update

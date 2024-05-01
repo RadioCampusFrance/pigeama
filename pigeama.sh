@@ -61,7 +61,15 @@ if [[ "$ID" == "debian" ]]
 then
     # on active "non-free", car Liquidsoap a besoin de libfdk-aac2 même si on ne va pas s'en servir
     sudo apt-get install -q -y software-properties-common
-    sudo apt-add-repository -y non-free
+    sudo apt-add-repository -y --component non-free
+    # certaines distributions passent par un autre .sources:
+    for source in /etc/apt/sources.list.d/*.sources
+    do
+        if [ -f "$source" ]
+        then
+            sed -i '/Components: /s/$/ non-free/' "$source"
+        fi
+    done
     sudo apt-get update
 fi
 

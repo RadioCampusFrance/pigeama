@@ -99,26 +99,31 @@ install_liquidsoap() {
 }
 
 
-case "$FORMATPIGE" in
-    flac)
-        EXTENSION="flac"
-        ENCODAGE="flac"
-        ;;
-    wav)
-        EXTENSION="wav"
-        ENCODAGE="wav"
-        ;;
-    # ogg)  # HS avec Liquidsoap2.2.1 - essayer avec %ffmpeg ?
-    #     EXTENSION="ogg"
-    #     ENCODAGE="vorbis(samplerate=44100, channels=2, quality=0.3)"
-    #     ;;
-    *) # dans le doute, mp3 !
-        EXTENSION="mp3"
-        ENCODAGE="mp3(bitrate=128)"
-        ;;
-esac
 
-__PIGE_SCRIPT=$(cat << END
+install_pige() {
+    printf "\n\n************ 📻  Installation du service de pige ************\n\n"
+
+    case "$FORMATPIGE" in
+        flac)
+            EXTENSION="flac"
+            ENCODAGE="flac"
+            ;;
+        wav)
+            EXTENSION="wav"
+            ENCODAGE="wav"
+            ;;
+        # ogg)  # HS avec Liquidsoap2.2.1 - essayer avec %ffmpeg ?
+        #     EXTENSION="ogg"
+        #     ENCODAGE="vorbis(samplerate=44100, channels=2, quality=0.3)"
+        #     ;;
+        *) # dans le doute, mp3 !
+            EXTENSION="mp3"
+            ENCODAGE="mp3(bitrate=128)"
+            ;;
+    esac
+
+
+    cat > "$HOME/pige.liq" << END
 settings.log.file.set(true)
 settings.log.file.path.set("$HOME/pige.log")
 settings.init.daemon.set(true)
@@ -126,15 +131,15 @@ settings.init.daemon.pidfile.set(true)
 settings.init.daemon.pidfile.path.set("$HOME/pige.pid")
 
 output.file(%$ENCODAGE,
-    {time.string("$PIGE_RACINE/%Y-%m-%d/%Hh%M_%S.$EXTENSION")},
+    { time.string("$PIGE_RACINE/%Y-%m-%d/%Hh%M_%S.$EXTENSION") },
     input.alsa(),
-    reopen_when = {0m}
+    reopen_when = { 0m }
 )
-
 END
-)
 
-__PIGE_SERVICE=$(cat << END
+
+    mkdir -p "$HOME/.config/systemd/user/"
+    cat > "$HOME/.config/systemd/user/pige.service" << END
 [Unit]
 Description=Pige d'antenne
 After=network.target
@@ -148,30 +153,48 @@ Restart=always
 
 [Install]
 WantedBy=default.target
-
 END
-)
 
-__NETTOYEUR_SCRIPT=$(cat << END
+
+    sudo dd of=/etc/logrotate.d/pige << END
+$HOME/pige*.log {
+    compress
+    rotate 10
+    size 10M
+    missingok
+    notifempty
+    sharedscripts
+    postrotate
+        for liq in $HOME/pige*.pid ; do
+            if [ -f "\$liq" ]
+            then
+                pid=\`cat "\$liq" | tr -d '\\n'\`
+                kill -s USR1 "\$pid"
+            fi
+        done
+    endscript
+}
+END
+
+
+    cat > "$HOME/nettoyeur_pige.sh" << END
 #!/bin/bash
 find $PIGE_RACINE/* -type f -mtime +$NBJOURS -delete
-find $PIGE_RACINE -type d -empty -delete
-
+find $PIGE_RACINE/* -type d -empty -delete
 END
-)
+    chmod +x "$HOME/nettoyeur_pige.sh"
 
-__NETTOYEUR_SERVICE=$(cat << END
+    cat > "$HOME/.config/systemd/user/nettoyeur_pige.service" << END
 [Unit]
 Description=Nettoyage de la pige d'antenne
 
 [Service]
 Type=simple
 ExecStart=$HOME/nettoyeur_pige.sh
-
 END
-)
 
-__NETTOYEUR_TIMER=$(cat << END
+
+    cat > "$HOME/.config/systemd/user/nettoyeur_pige.timer" << END
 [Unit]
 Description=Nettoyage de la pige d'antenne
 
@@ -181,44 +204,7 @@ Persistent=true
 
 [Install]
 WantedBy=timers.target
-
 END
-)
-
-__LOGROTATE=$(cat << END
-$HOME/pige*.log {
-  compress
-  rotate 10
-  size 10M
-  missingok
-  notifempty
-  sharedscripts
-  postrotate
-    for liq in $HOME/pige*.pid ; do
-      if test \$liq != '$HOME/pige*.pid' ; then
-        pid=`cat $liq | tr -d '\n'`
-        kill -s USR1 $pid
-      fi
-    done
-  endscript
-}
-
-END
-)
-
-install_pige() {
-    printf "\n\n************ 📻  Installation du service de pige ************\n\n"
-
-    mkdir -p "$HOME/.config/systemd/user/"
-
-    echo "$__PIGE_SCRIPT" > "$HOME/pige.liq"
-    echo "$__PIGE_SERVICE" > "$HOME/.config/systemd/user/pige.service"
-    echo "$__LOGROTATE" | sudo dd of=/etc/logrotate.d/pige
-
-    echo "$__NETTOYEUR_SCRIPT" > "$HOME/nettoyeur_pige.sh"
-    chmod +x "$HOME/nettoyeur_pige.sh"
-    echo "$__NETTOYEUR_SERVICE" > "$HOME/.config/systemd/user/nettoyeur_pige.service"
-    echo "$__NETTOYEUR_TIMER" > "$HOME/.config/systemd/user/nettoyeur_pige.timer"
 
     systemctl --user daemon-reload
     loginctl enable-linger
@@ -227,7 +213,11 @@ install_pige() {
 }
 
 
-__CONF_APACHE=$(cat << END
+
+install_apache() {
+    printf "\n\n************ 🪶  Installation d'Apache ************\n\n"
+    sudo apt-get install -y apache2
+    sudo dd of=/etc/apache2/sites-available/000-default.conf << END
 ServerName pige.local
 
 <Directory $PIGE_RACINE>
@@ -237,19 +227,16 @@ ServerName pige.local
 </Directory>
 
 DocumentRoot $PIGE_RACINE
-
 END
-)
-
-install_apache() {
-    printf "\n\n************ 🪶  Installation d'Apache ************\n\n"
-    sudo apt-get install -y apache2
-    echo "$__CONF_APACHE" | sudo dd of=/etc/apache2/sites-available/000-default.conf
     # TODO sudo ufw allow 'WWW' ?
 }
 
 
-__CONF_SAMBA=$(cat << END
+
+install_samba() {
+    printf "\n\n************ 🪟  Installation de Samba ************\n\n"
+    sudo apt-get install -y samba samba-client
+    sudo dd of=/etc/samba/smb.conf << END
 [global]
 # "workgroup" doit etre different de "netbios name"
 workgroup = RADIO
@@ -264,14 +251,7 @@ path = $PIGE_RACINE
 read only = yes
 guest ok = yes
 browseable = yes
-
 END
-)
-
-install_samba() {
-    printf "\n\n************ 🪟  Installation de Samba ************\n\n"
-    sudo apt-get install -y samba samba-client
-    echo "$__CONF_SAMBA" | sudo dd of=/etc/samba/smb.conf
 }
 
 

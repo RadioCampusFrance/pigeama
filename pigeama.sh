@@ -73,7 +73,7 @@ then
     sudo apt-get update
 fi
 
-sudo apt-get -q install -y curl wget ffmpeg
+sudo apt-get -q install -y wget ffmpeg alsa-utils
 
 ######################## Les vraies fonctions et contenus ########################
 

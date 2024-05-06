@@ -118,7 +118,7 @@ install_pige() {
         #     ;;
         *) # dans le doute, mp3 !
             EXTENSION="mp3"
-            ENCODAGE="mp3(bitrate=128)"
+            ENCODAGE="mp3(bitrate=192)"
             ;;
     esac
 

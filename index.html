@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PigeAMA</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/navbar-fixed-top.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">PigeAMA</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="#quoi">Qu'est-ce ?</a></li>
+            <li><a href="#installer">Installer</a></li>
+            <li><a href="#utilisation">Utilisation</a></li>
+            <li><a href="#aide">Aide</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#contribuer">Contribuer</a></li>
+            <li><a href="https://codeberg.org/PigeAMA/PigeAMA">Code source</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+
+    <div class="container-fluid">
+      <div class="jumbotron hero" id="banniere">
+        <h1>PigeAMA</h1>
+        <h2>Pour dormir sur vos deux oreilles :)</h2>
+        <p>
+            Et surtout pour installer rapidement une pige d'antenne simple, efficace,
+            et reposant sur des logiciels libres.
+        </p>
+      </div>
+    </div>
+
+
+    <div class="container" id="quoi">
+      <a name="quoi" class="ancre"></a>
+      <h1>Qu'est-ce que c'est ?</h1>
+      <p>
+          PigeAMA, pour Pige d'Antenne Marchant Automatiquement
+          (mais surtout pour le jeux de mots),
+          est un outil d'installation d'une pige d'antenne pensé pour les radios associatives.
+          En partant d'un ordinateur sous Linux,
+          il installe et configure des logiciels libres&nbsp;:
+          <ul>
+              <li>
+                  <a href="https://liquidsoap.info" target="_blank">Liquidsoap</a>
+                  pour enregistrer ce qui arrive dans la carte son,
+                  découpé en fichiers par heure et en dossiers par jour.
+              </li>
+              <li>
+                  <a href="https://www.samba.org/" target="_blank">Samba</a>
+                  pour mettre à disposition ces fichiers sur le réseau local,
+                  même depuis Windows.
+              </li>
+              <li>
+                  <a href="https://httpd.apache.org/" target="_blank">Apache</a>
+                  pour télécharger ces fichiers
+                  avec un navigateur Web.
+              </li>
+          </ul>
+      </p>
+      <p>
+          PigeAMA ne sert qu'à l'installation : ensuite ça enregistre
+          et ça continuera de le faire pendant longtemps.
+          Libre à vous de modifier ce qui est installé,
+          par exemple pour changer les moyens d'accès aux enregistrements ou
+          envoyer le flux sonore vers un
+          <a href="https://icecast.org/" target="_blank">Icecast</a>.
+      </p>
+    </div>
+
+    <div class="container" id="installer">
+      <a name="installer" class="ancre"></a>
+      <h1>Installer</h1>
+      <h2>Préparation</h2>
+      <p>
+          Prenez un ordinateur de récup (en France, par exemple chez 
+          <a href="https://www.afbshop.fr/" target="_blank">AFB</a>,
+          <a href="https://www.ecodair.com/" target="_blank">Ecodair</a> ou
+          <a href="https://www.tradediscount.com/" target="_blank">TradeDiscount</a>)
+          car il n'y a pas besoin d'une machine puissante ni hyper-fiable.
+          <mark>
+            Il faut surtout un ordinateur avec une carte son,
+            que vous pouvez régler pour démarrer dès qu'il a du courant
+            et qui contienne un ou deux disques durs.
+          </mark>
+          D'ailleurs LE critère est le volume de disque disponible,
+          qui sera lié au format de fichiers que vous souhaitez utiliser&nbsp;:
+      </p>
+
+      <a name="volume"></a>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+              <th class="center">Format</th>
+              <th class="center">Espace à prévoir pour 31 jours</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>WAV</td><td>500 Go</td></tr>
+          <tr><td>FLAC</td><td>250 Go</td></tr>
+          <tr><td>MP3 (192kbps)</td><td>75 Go</td></tr>
+        </tbody>
+      </table>
+
+      <p><mark>
+        PigeAMA est conçu pour être installé sur Linux,
+        sur une distribution Debian ou dérivées :
+        Ubuntu, Mint, ... tout ce qui utilise <code>apt</code>.
+        </mark>
+        L'ordinateur doit avoir accès à Internet au moment de l'installation.
+      </p>
+      <p>
+        Pensez à régler la machine pour qu'elle démarre dès qu'elle est reliée au secteur.
+        En général c'est une option qui se trouve dans les menus du BIOS,
+        accessible quand la machine démarre (en appuyant sur F1/F2/F10/DEL/...).
+      </p>
+
+      <a name="installcommands"></a>
+      <h2>L'installation</h2>
+      <p>
+        Il y a quelques commandes à recopier dans un terminal :
+        appuyez sur Entrée à la fin de la ligne.
+      </p>
+      <p>
+        Téléchargez l'installeur :
+      </p>
+      <pre>wget https://codeberg.org/PigeAMA/PigeAMA/raw/branch/main/pigeama.sh</pre>
+      <p>
+        Autorisez l'éxécution de l'installateur :
+      </p>
+      <pre>chmod +x pigeama.sh</pre>
+
+      <p>
+        C'est parti :
+      </p>
+      <pre>NBJOURS=31 FORMATPIGE=flac ./pigeama.sh</pre>
+      <p>
+        Ci-dessus, nous précisons les deux options possibles&nbsp;:
+      </p>
+      <ul>
+        <li>
+          <code>NBJOURS</code> indique la durée de conservation des fichiers,
+          en nombre de jours. Par défaut il vaut 31, pour être conforme à la pige légale Arcom/CSA.
+          Vous pouvez mettre plus, selon l'espace disque disponible
+          (cf. <a href="#volume">le tableau ci-dessus</a>).
+        </li>
+        <li>
+          <code>FORMATPIGE</code> indique le format des fichiers enregistrés.
+          Vous pouvez utiliser <code>flac</code>, <code>wav</code> ou <code>mp3</code>.
+          Le MP3 est réglé à 192kbps, vous pourrez modifier cela après l'installation.
+        </li>
+      </ul>
+    </div>
+
+
+    <div class="container" id="utilisation">
+      <a name="utilisation" class="ancre"></a>
+      <h1>Une fois installée</h1>
+      <p>
+        Après installation, l'ordinateur va redémarrer, puis enregistrer en continu.
+        Vérifiez que l'enregistrement fonctionne bien
+        juste après l'installation, mais aussi mensuellement.
+        Vous pouvez aussi apporter quelques modifications à l'installation.
+      </p>
+
+      <h2>Accéder aux enregistrements</h2>
+      <p>
+        L'enregistreur écrit dans votre répertoire personnel,
+        dans un dossier <code>pige</code>.
+        A l'intérieur il y aura un dossier par jour,
+        puis un fichier par heure.
+        Seul le fichier en cours d'écriture est ouvert : vous pouvez faire ce que vous voulez des autres.
+        Les plus anciens seront effacés automatiquement.
+      </p>
+      <p>TODO capture d'écran du répertoire pige</p>
+
+      <h2>Trouver l'adresse IP de la machine</h2>
+      <p>
+        Si votre pige est reliée à un réseau local (via une box Internet, par exemple)
+        elle rend accessible les fichiers enregistrés aux autres ordinateurs sur ce réseau.
+        Vous allez avoir besoin de son adresse IP.
+        Vous pouvez l'afficher en tapant la commande
+        <code>ip a show up scope global</code>,
+        ce sont les 4 chiffres après <code>inet</code> :
+      </p>
+      <div class="text-center">
+        <img src="exemple_ip_a.png"
+          alt="exemple de résultat de la commande ip, avec l'adresse encadrée"
+          class="rounded mx-auto d-block">
+      </div>
+      <p>
+        Dans les exemples ci-dessous, on utilisera l'adresse 192.168.0.123 :
+        à vous de remplacer par la votre.
+      </p>
+
+
+      <h2>Accès aux fichiers via un navigateur Web</h2>
+      <p>
+        Vous pouvez écouter ou télécharger les fichiers enregistrés avec un navigateur Web,
+        en vous rendant à l'adresse de la machine.
+        Par exemple <code>http://192.168.0.123/</code>
+      </p>
+
+
+      <h2>Accès aux fichiers via le dossier partagé</h2>
+      <p>
+        Vous pouvez télécharger les fichiers enregistrés via un partage réseau,
+        en donnant l'adresse de la machine qui pige.
+      </p>
+        <ul>
+          <li>Sous Linux, entrez <code>smb://192.168.0.123/pige</code>.</li>
+          <li>
+            Sous Windows, entrez <code>\\pige\pige</code>
+            ou <code>\\192.168.0.123\pige</code>.
+          </li>
+        </ul>
+      <p>
+        Choisissez l'accès anonyme.
+        Cet accès est en lecture seule.
+        Nous vous recommandons d'attacher ces disques réseau automatiquement,
+        sur tous les ordinateurs de la radio.
+      </p>
+
+
+      <h2>Les fichiers installés</h2>
+      <p>
+        Sur la pige, vous trouverez dans le répertoire personnel quelques fichiers qui
+        peuvent être intéressants si vous souhaitez la modifier ou en cas de problème.
+      </p>
+      <ul>
+        <li>
+          <code>installation.log</code> est une trace de tout ce qui a été affiché pendant l'installation.
+          Il ne sert qu'en cas de problème : une fois l'installation rodée,
+          vous pouvez le supprimer.
+        </li>
+        <li>
+          <code>pige.log</code> trace ce qui se passe dans l'enregistreur.
+          Il sont archivés puis effacés automatiquement,
+          leur contenu peut servir si la pige ne marche pas bien.
+        </li>
+        <li>
+          <code>nettoyeur_pige.sh</code> est le script qui efface les
+          enregistrements au-delà d'un certain âge.
+          Il est exécuté automatiquement chaque jour.
+          Si vous souhaitez changer la durée de conservation,
+          c'est là que ça se passe : le nombre de jours est juste après le <code>-mtime</code>.
+        </li>
+        <li>
+          <code>pige.liq</code> est le script
+          <a href="https://liquidsoap.info" target="_blank">Liquidsoap</a>
+          qui s'occupe de l'enregistrement,
+          on en reparle ci-dessous.
+        </li>
+      </ul>
+      <p>
+        Les services systèmes installés par PigeAMA sont définis par des fichiers
+        placés dans le répertoire utilisateur,
+        dans <code>~/.config/systemd/user/</code>.
+      </p>
+
+      <h2>Envoyer le flux sonore vers icecast</h2>
+
+      <p>
+        L'enregistrement est réalisé par un script Liquidsoap : le fichier <code>pige.liq</code>.
+        Ce script contient beaucoup de commentaires :
+        ce sont les lignes qui commencent par un <code>#</code>.
+        Ces lignes sont ignorées par Liquidsoap et nous permettent d'inclure
+        des notes, des explications, ou des exemples.
+      </p>
+
+      <p><strong>
+        ⚠️ Avant toute modification du fichier <code>pige.liq</code>,
+        faites-en une copie de sauvegarde pour pouvoir revenir à une version fonctionnelle, au cas où.
+        Vous pouvez aussi utiliser un gestionnaire de versions, comme Git.
+      </strong></p>
+
+      <p>
+        Ce script est aussi capable d'envoyer le flux sonore vers un serveur de streaming Icecast.
+        Il peut à la fois enregistrer des fichiers et envoyer vers Icecast, ou ne faire que l'un des deux,
+        ou encore envoyer vers plusieurs Icecast avec des format différents.
+
+        A la fin du fichier, vous trouverez un bloc qui ajoute une sortie vers Icecast.
+        Mais ce bloc est caché derrière des <code>#</code>.
+        Pour activer la sortie Icecast,
+        retirez-les et remplissez les paramètres correspondant à votre serveur :
+        point de montage,
+        addresse, utilisateur, mot de passe.
+      </p>
+
+      <p>
+        C'est aussi dans ce script qu'on choisit le format des fichiers, ou du flux Icecast.
+        Il y a déjà quelques exemples en commentaire.
+        Pour plus de détails, voyez
+        <a href="https://www.liquidsoap.info/doc-dev/encoding_formats.html" target="_blank">
+          la page de documentation Liquidsoap sur les formats.
+        </a>
+      </p>
+
+      <p><strong>
+        Après toute modification du fichier <code>pige.liq</code>, vous devez :
+        <ol>
+          <li>
+            Vérifier que la modification est correcte en tapant
+            <code>liquidsoap --check pige.liq</code> - 
+            s'il n'affiche rien, c'est bon !
+          </li>
+          <li>
+            Si la modification est correcte, redémarrez le processus de pige avec la commande
+            <pre>systemctl --user restart pige</pre>
+          </li>
+        </ol>
+      </strong></p>
+    </div>
+
+    <div class="container" id="aide">
+      <a name="aide" class="ancre"></a>
+      <h1>A l'aide !</h1>
+
+      <h2>En cas de problème à l'installation</h2>
+      <p>
+          Le détail de ce qui s'est passé lors de l'installation est écrit dans le fichier <code>installation.log</code>:
+          son contenu peut contenir des indices.
+          Attachez ce fichier quand vous demandez de l'aide.
+          Relancez l'installation en ajoutant <code>DEBUG=1</code> pour avoir encore plus de détails
+          (ce qui donne par exemple <code>DEBUG=1 NBJOURS=31 FORMATPIGE=wav ./pigeama.sh</code>).
+      </p>
+
+      <h2>Si les fichiers ne contiennent que du silence</h2>
+      <p>
+          TODO Préciser/choisir la carte son
+      </p>
+
+      <h2>Peut-on modifier/refaire l'installation ?</h2>
+      <p>
+        Oui. Il est possible de relancer le script d'installation sur une machine
+        déjà installée, même avec des réglages différents de format de fichier ou
+        de temps de conservation.
+      </p>
+
+      <h2>Mettre à jour</h2>
+      <p>
+        Vous pouvez effectuer les mises à jour habituelles,
+        avec <code>apt update</code> et <code>apt upgrade</code>.
+        Vérifiez que ça pige encore correctement après le redémarrage.
+        Si ce n'est pas le cas, reprenez <a href="#installcommands">l'installation</a> depuis le début.
+      </p>
+    </div>
+
+
+    <div class="container fillfooter" id="contribuer">
+      <a name="contribuer" class="ancre"></a>
+      <h1>Aidez PigeAMA</h1>
+      <p>
+        PigeAMA est hébergé par <a href="https://codeberg.org/">CodeBerg</a>.
+        Vous pouvez vous créer un compte gratuitement,
+        et créer une demande sur <a href="https://codeberg.org/PigeAMA/PigeAMA/issues/new" target="_blank">cette page</a>.
+      </p>
+      <p>
+        Si vous avez l'envie, la curiosité ou des propositions,
+        n'hésitez pas à vous proposer pour rejoindre l'équipe qui maintient et teste tout cela,
+        y compris cette documentation.
+        Une pull request sera bienvenue aussi !
+      </p>
+
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>

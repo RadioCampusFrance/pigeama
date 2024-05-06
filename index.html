@@ -201,7 +201,11 @@
         Seul le fichier en cours d'écriture est ouvert : vous pouvez faire ce que vous voulez des autres.
         Les plus anciens seront effacés automatiquement.
       </p>
-      <p>TODO capture d'écran du répertoire pige</p>
+      <div class="text-center">
+        <img src="capture_pige_locale.png"
+          alt="Capture d'écran des répertoires contenant les fichiers de pige"
+          class="rounded mx-auto d-block">
+      </div>
 
       <h2>Trouver l'adresse IP de la machine</h2>
       <p>
@@ -229,6 +233,11 @@
         en vous rendant à l'adresse de la machine.
         Par exemple <code>http://192.168.0.123/</code>
       </p>
+      <div class="text-center">
+        <img src="capture_pige_web.png"
+          alt="Capture d'écran des répertoires contenant les fichiers de pige, affichés par un navigateur."
+          class="rounded mx-auto d-block">
+      </div>
 
 
       <h2>Accès aux fichiers via le dossier partagé</h2>
@@ -287,10 +296,12 @@
         dans <code>~/.config/systemd/user/</code>.
       </p>
 
+      <a name="icecast"></a>
       <h2>Envoyer le flux sonore vers icecast</h2>
 
       <p>
         L'enregistrement est réalisé par un script Liquidsoap : le fichier <code>pige.liq</code>.
+        Vous pouvez l'ouvrir avec un éditeur de texte.
         Ce script contient beaucoup de commentaires :
         ce sont les lignes qui commencent par un <code>#</code>.
         Ces lignes sont ignorées par Liquidsoap et nous permettent d'inclure
@@ -344,20 +355,19 @@
     <div class="container" id="aide">
       <a name="aide" class="ancre"></a>
       <h1>A l'aide !</h1>
+      <blockquote class="blockquote">
+        <p>Dans le doute : reboote.</p>
+      </blockquote>
 
       <h2>En cas de problème à l'installation</h2>
       <p>
-          Le détail de ce qui s'est passé lors de l'installation est écrit dans le fichier <code>installation.log</code>:
-          son contenu peut contenir des indices.
-          Attachez ce fichier quand vous demandez de l'aide.
-          Relancez l'installation en ajoutant <code>DEBUG=1</code> pour avoir encore plus de détails
-          (ce qui donne par exemple <code>DEBUG=1 NBJOURS=31 FORMATPIGE=wav ./pigeama.sh</code>).
+        Le détail de ce qui s'est passé lors de l'installation est écrit dans le fichier <code>installation.log</code>:
+        son contenu peut contenir des indices.
+        Attachez ce fichier quand vous demandez de l'aide.
+        Relancez l'installation en ajoutant <code>DEBUG=1</code> pour avoir encore plus de détails.
+        Ce qui donne par exemple
       </p>
-
-      <h2>Si les fichiers ne contiennent que du silence</h2>
-      <p>
-          TODO Préciser/choisir la carte son
-      </p>
+      <pre>DEBUG=1 NBJOURS=31 FORMATPIGE=wav ./pigeama.sh</pre>
 
       <h2>Peut-on modifier/refaire l'installation ?</h2>
       <p>
@@ -373,7 +383,39 @@
         Vérifiez que ça pige encore correctement après le redémarrage.
         Si ce n'est pas le cas, reprenez <a href="#installcommands">l'installation</a> depuis le début.
       </p>
+
+    <h2>Si les fichiers ne contiennent que du silence</h2>
+      <p>
+        <em>Lisez les précautions concernants l'édition du script Liquidsoap dans
+        <a href="#icecast">la partie sur Icecast</a>.
+        </em>
+      </p><p>
+        Dans le script de base, l'entrée sonore est définie par cette ligne&nbsp;:
+      </p>
+      <pre>entree = input.alsa()</pre>
+      <p>
+        Si les fichiers ne contiennent que du silence (alors que tout est bien branché,
+        bien entendu) c'est peut-être que l'ordinateur contient plusieurs cartes son
+        et que l'on est pas tombé sur la bonne.
+        Dans ce cas, vous pouvez essayer deux variantes de la ligne de l'entrée sonore&nbsp;:
+      </p>
+      <ul>
+        <li>
+          Remplacez par <code>entree = input.pulseaudio()</code>.
+          Vous pouvez alors choisir l'entrée dans la partie "Son" des paramètres système.
+        </li>
+        <li>
+          Ou alors précisez l'entrée ALSA, en écrivant <code>entree = input.alsa(device='hw:1,0')</code>.
+          Le premier chiffre est le numéro de carte son,
+          le deuxième est le numéro de périphérique dans la carte.
+          Les compteurs commencent à 0, donc l'exemple pointe la première entrée de la deuxième carte son.
+          Pour lister les possibilités, utilisez la commande <code>arecord -l</code>.
+        </li>
+      </ul>
+
     </div>
+
+
 
 
     <div class="container fillfooter" id="contribuer">
@@ -390,6 +432,7 @@
         y compris cette documentation.
         Une pull request sera bienvenue aussi !
       </p>
+    </div>
 
     <script src="js/bootstrap.min.js"></script>
   </body>

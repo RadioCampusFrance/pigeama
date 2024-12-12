@@ -57,19 +57,13 @@ chmod go+rw $PIGE_RACINE
 ARCH="$(dpkg --print-architecture)" # amd64, arm, etc.
 source /etc/os-release # on va utiliser ID et VERSION_CODENAME
 
+sudo apt-get update
+
 if [[ "$ID" == "debian" ]]
 then
     # on active "non-free", car Liquidsoap a besoin de libfdk-aac2 même si on ne va pas s'en servir
     sudo apt-get install -q -y software-properties-common
-    sudo apt-add-repository -y --component non-free
-    # certaines distributions passent par un autre .sources:
-    for source in /etc/apt/sources.list.d/*.sources
-    do
-        if [ -f "$source" ]
-        then
-            sudo sed -i '/Components: /s/$/ non-free/' "$source"
-        fi
-    done
+    sudo apt-add-repository -y -U http://deb.debian.org/debian/ --component non-free
     sudo apt-get update
 fi
 

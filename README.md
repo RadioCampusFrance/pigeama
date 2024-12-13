@@ -12,5 +12,9 @@ L'installation est expliquée plus en détails sur https://pigeama.codeberg.page
 
 PigeAMA est un script créé par Martin Kirchgessner et publié sous licence [WTFPL](http://www.wtfpl.net/)
 donc sans aucune garantie : gardez un oeil dessus quand même !
+
 Si vous souhaitez donner un coup de main, pour améliorer le script, son résultat,
 la documentation, ou aider aux installations, n'hésitez pas à faire signe !
+En créant un compte sur Codeberg vous pourrez créer un ticket
+[ici](https://codeberg.org/PigeAMA/PigeAMA/issues/new),
+vous pouvez aussi contacter l'auteur [sur Mastodon](https://piaille.fr/@martin_kirch/).

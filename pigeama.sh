@@ -18,7 +18,7 @@
 : "${FORMATPIGE:=mp3}"
 
 # Peut être fourni pour essayer avec une autre version de Liquidsoap
-: "${VERSION_LS:=2.2.1}"
+: "${VERSION_LS:=2.2.5}" # cf. la bidouille avec VERSION_CODENAME, a retirer en cas de maj
 
 ######################## Pré-requis ########################
 set -o errexit
@@ -76,6 +76,10 @@ install_liquidsoap() {
 
     # bricolage instable mais fonctionnel
     local ASSETS_URL="https://github.com/savonet/liquidsoap/releases/expanded_assets/v$VERSION_LS"
+    if [ "VERSION_CODENAME" = "noble" ]; # plus besoin à partir de LS2.3
+    then
+        VERSION_CODENAME="jammy"
+    fi
     wget -nd -r -l 1 -R '*dbgsym*' -A "liquidsoap_*$ID*$VERSION_CODENAME*$ARCH.deb" "$ASSETS_URL"
 
     local PACKAGE=$(ls -tr liquidsoap*.deb |tail)

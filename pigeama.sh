@@ -141,7 +141,7 @@ entree = input.alsa()
 # %mp3.vbr(quality=2, samplerate=48000)
 
 output.file(%$ENCODAGE,
-    { time.string("$PIGE_RACINE/%Y-%m-%d/%Hh%M_%S.$EXTENSION") },
+    { time.string("$PIGE_RACINE/%Y-%m-%d/%Hh%M_%S_%z.$EXTENSION") },
     entree,
     reopen_when = { 0m }
 )

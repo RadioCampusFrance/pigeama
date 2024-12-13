@@ -275,12 +275,42 @@ browseable = yes
 END
 }
 
+install_avahi() {
+    sudo apt-get install -y avahi-daemon
+    sudo dd of=/etc/avahi/services/http.service <<END
+<?xml version="1.0" standalone='no'?>
+<!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+<service-group>
+  <name replace-wildcards="yes">%h</name>
+  <service>
+    <type>_http._tcp</type>
+    <port>80</port>
+  </service>
+</service-group>
+END
+
+    sudo dd of=/etc/avahi/services/samba.service <<END
+<?xml version="1.0" standalone='no'?>
+<!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+<service-group>
+  <name replace-wildcards="yes">%h</name>
+  <service>
+    <type>_smb._tcp</type>
+    <port>445</port>
+  </service>
+</service-group>
+END
+
+    sudo systemctl restart avahi-daemon
+}
+
 
 install_liquidsoap
 install_pige
 install_apache
 install_samba
 sudo hostnamectl set-hostname pige
+install_avahi
 
 printf "\n\n\n\n\n✨ ✨ ✨ ✨ ✨ ✨ 🏁 Tout est installé 🏁 ✨ ✨ ✨ ✨ ✨ ✨n\n\n\n\n"
 printf "`tput bold`⚠️   REDEMARRAGE de la machine dans 10s (appuyez sur Ctrl+C pour annuler)...\n\n"

@@ -37,7 +37,7 @@ then
     exit 1
 fi
 printf "PigeAMA a besoin des droits d'administration (sudo), il est possible que le mot de passe vous soit demandé régulièrement.\n"
-if ! sudo -v
+if ! sudo echo OK
 then
     printf "\nImpossible de 'sudo', abandon.\n"
 fi

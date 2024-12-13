@@ -189,9 +189,13 @@
         Seul le fichier en cours d'écriture est ouvert : vous pouvez faire ce que vous voulez des autres.
         Les plus anciens seront effacés automatiquement.
       </p>
-      <figure class="image">
-        <img src="capture_pige_locale.png" alt="Capture d'écran des répertoires contenant les fichiers de pige">
-      </figure>
+      <img src="capture_pige_locale.png" alt="Capture d'écran des répertoires contenant les fichiers de pige">
+      <p>
+        Normalement, la pige partage aussi sur le réseau local
+        à l'adresse <a href="http://pige.local/" target="_blank">http://pige.local/</a>.
+        Cette adresse doit aussi fonctionner pour le partage de fichiers (avec Samba).
+        Sinon vous pouvez aussi utiliser l'adresse IP:
+      </p>
 
       <h2>Trouver l'adresse IP de la machine</h2>
       <p>
@@ -202,9 +206,7 @@
         <code>ip a show up scope global</code>,
         ce sont les 4 chiffres après <code>inet</code> :
       </p>
-      <figure class="image">
-        <img src="exemple_ip_a.png" alt="exemple de résultat de la commande ip, avec l'adresse encadrée">
-      </figure>
+      <img src="exemple_ip_a.png" alt="exemple de résultat de la commande ip, avec l'adresse encadrée">
       <p>
         Dans les exemples ci-dessous, on utilisera l'adresse 192.168.0.123 :
         à vous de remplacer par la votre.
@@ -217,9 +219,7 @@
         en vous rendant à l'adresse de la machine.
         Par exemple <code>http://192.168.0.123/</code>
       </p>
-      <figure class="image">
-        <img src="capture_pige_web.png" alt="Capture d'écran des répertoires contenant les fichiers de pige, affichés par un navigateur.">
-      </figure>
+      <img src="capture_pige_web.png" alt="Capture d'écran des répertoires contenant les fichiers de pige, affichés par un navigateur.">
 
 
       <h2>Accès aux fichiers via le dossier partagé</h2>

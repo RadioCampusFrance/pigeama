@@ -1,66 +1,53 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" class="has-navbar-fixed-top">
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>PigeAMA</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="css/navbar-fixed-top.css" rel="stylesheet">
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <link href="css/bulma.min.css" rel="stylesheet">
   </head>
 
   <body>
-    <!-- Fixed navbar -->
-    <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">PigeAMA</a>
+    <nav role="navigation" class="navbar is-primary is-fixed-top">
+      <div class="navbar-brand is-large">
+        <a href="#" class="navbar-item">PigeAMA</a>
+
+        <a role="button" aria-label="menu" id="menubutton" class="navbar-burger" onclick="togglemenu()">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+
+      <div id="navbarmenu" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="#quoi">Qu'est-ce ?</a>
+          <a class="navbar-item" href="#installer">Installer</a>
+          <a class="navbar-item" href="#utilisation">Utilisation</a>
+          <a class="navbar-item" href="#aide">Aide</a>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="#quoi">Qu'est-ce ?</a></li>
-            <li><a href="#installer">Installer</a></li>
-            <li><a href="#utilisation">Utilisation</a></li>
-            <li><a href="#aide">Aide</a></li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="#contribuer">Contribuer</a></li>
-            <li><a href="https://codeberg.org/PigeAMA/PigeAMA">Code source</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
+        <div class="navbar-end">
+          <a class="navbar-item" href="#contribuer">Contribuer</a>
+          <a class="navbar-item" href="https://codeberg.org/PigeAMA/PigeAMA">Code source</a>
+        </div>
       </div>
     </nav>
 
-
-    <div class="container-fluid">
-      <div class="jumbotron hero" id="banniere">
-        <h1>PigeAMA</h1>
-        <h2>Pour dormir sur vos deux oreilles :)</h2>
-        <p>
+    <section class="hero is-medium">
+      <div class="hero-body has-text-centered">
+        <h1 class="title">PigeAMA</h1>
+        <h2 class="subtitle">Pour dormir sur vos deux oreilles :)</h2>
+        <p class="subtitle">
             Et surtout pour installer rapidement une pige d'antenne simple, efficace,
             et reposant sur des logiciels libres.
         </p>
       </div>
-    </div>
+    </section>
 
 
-    <div class="container" id="quoi">
+    <section class="content" id="quoi">
+    <div class="container">
       <a name="quoi" class="ancre"></a>
       <h1>Qu'est-ce que c'est ?</h1>
       <p>
@@ -96,9 +83,10 @@
           <a href="https://icecast.org/" target="_blank">Icecast</a>.
       </p>
     </div>
+    </section>
 
-    <div class="container" id="installer">
-      <a name="installer" class="ancre"></a>
+    <section class="content" id="installer">
+    <div class="container">
       <h1>Installer</h1>
       <h2>Préparation</h2>
       <p>
@@ -117,7 +105,7 @@
       </p>
 
       <a name="volume"></a>
-      <table class="table table-striped">
+      <table class="table is-striped has-text-centered">
         <thead>
           <tr>
               <th class="center">Format</th>
@@ -180,10 +168,10 @@
         </li>
       </ul>
     </div>
+    </section>
 
-
-    <div class="container" id="utilisation">
-      <a name="utilisation" class="ancre"></a>
+    <section class="content" id="utilisation">
+    <div class="container">
       <h1>Une fois installée</h1>
       <p>
         Après installation, l'ordinateur va redémarrer, puis enregistrer en continu.
@@ -201,11 +189,9 @@
         Seul le fichier en cours d'écriture est ouvert : vous pouvez faire ce que vous voulez des autres.
         Les plus anciens seront effacés automatiquement.
       </p>
-      <div class="text-center">
-        <img src="capture_pige_locale.png"
-          alt="Capture d'écran des répertoires contenant les fichiers de pige"
-          class="rounded mx-auto d-block">
-      </div>
+      <figure class="image">
+        <img src="capture_pige_locale.png" alt="Capture d'écran des répertoires contenant les fichiers de pige">
+      </figure>
 
       <h2>Trouver l'adresse IP de la machine</h2>
       <p>
@@ -216,11 +202,9 @@
         <code>ip a show up scope global</code>,
         ce sont les 4 chiffres après <code>inet</code> :
       </p>
-      <div class="text-center">
-        <img src="exemple_ip_a.png"
-          alt="exemple de résultat de la commande ip, avec l'adresse encadrée"
-          class="rounded mx-auto d-block">
-      </div>
+      <figure class="image">
+        <img src="exemple_ip_a.png" alt="exemple de résultat de la commande ip, avec l'adresse encadrée">
+      </figure>
       <p>
         Dans les exemples ci-dessous, on utilisera l'adresse 192.168.0.123 :
         à vous de remplacer par la votre.
@@ -233,11 +217,9 @@
         en vous rendant à l'adresse de la machine.
         Par exemple <code>http://192.168.0.123/</code>
       </p>
-      <div class="text-center">
-        <img src="capture_pige_web.png"
-          alt="Capture d'écran des répertoires contenant les fichiers de pige, affichés par un navigateur."
-          class="rounded mx-auto d-block">
-      </div>
+      <figure class="image">
+        <img src="capture_pige_web.png" alt="Capture d'écran des répertoires contenant les fichiers de pige, affichés par un navigateur.">
+      </figure>
 
 
       <h2>Accès aux fichiers via le dossier partagé</h2>
@@ -351,9 +333,10 @@
         </ol>
       </strong></p>
     </div>
+    </section>
 
-    <div class="container" id="aide">
-      <a name="aide" class="ancre"></a>
+    <section class="content" id="aide">
+    <div class="container">
       <h1>A l'aide !</h1>
       <blockquote class="blockquote">
         <p>Dans le doute : reboote.</p>
@@ -414,12 +397,13 @@
       </ul>
 
     </div>
+    </section>
 
 
 
 
-    <div class="container fillfooter" id="contribuer">
-      <a name="contribuer" class="ancre"></a>
+    <section class="content fillfooter" id="contribuer">
+    <div class="container">
       <h1>Aidez PigeAMA</h1>
       <p>
         PigeAMA est hébergé par <a href="https://codeberg.org/">CodeBerg</a>.
@@ -430,10 +414,20 @@
         Si vous avez l'envie, la curiosité ou des propositions,
         n'hésitez pas à vous proposer pour rejoindre l'équipe qui maintient et teste tout cela,
         y compris cette documentation.
-        Une pull request sera bienvenue aussi !
+        Vous pouvez contacter l'auteur [sur Mastodon](https://piaille.fr/@martin_kirch/).
+        En créant un compte sur Codeberg vous pourrez créer un ticket
+        [ici](https://codeberg.org/PigeAMA/PigeAMA/issues/new),
+        une pull request sera bienvenue aussi !
       </p>
     </div>
+    </section>
 
-    <script src="js/bootstrap.min.js"></script>
+    <script>
+      function togglemenu() {
+        document.getElementById("navbarmenu").classList.toggle("is-active");
+        document.getElementById("menubutton").classList.toggle("is-active");
+      }
+    
+    </script>
   </body>
 </html>

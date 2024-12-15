@@ -18,7 +18,7 @@
 : "${FORMATPIGE:=mp3}"
 
 # Peut être fourni pour essayer avec une autre version de Liquidsoap
-: "${VERSION_LS:=2.2.5}" # cf. la bidouille avec VERSION_CODENAME, a retirer en cas de maj
+: "${VERSION_LS:=2.3.0}"
 
 ######################## Pré-requis ########################
 set -o errexit
@@ -61,9 +61,12 @@ sudo apt-get update
 
 if [[ "$ID" == "debian" ]]
 then
-    # on active "non-free", car Liquidsoap a besoin de libfdk-aac2 même si on ne va pas s'en servir
-    sudo apt-get install -q -y software-properties-common
-    sudo apt-add-repository -y -U http://deb.debian.org/debian/ --component non-free
+    # copié sur https://github.com/savonet/liquidsoap/blob/main/.github/docker/Dockerfile.production#L17
+    # cf. https://www.liquidsoap.info/doc-dev/ffmpeg.html#fdk-aac-support-in-ffmpeg
+    sudo apt install -y ca-certificates
+    echo "deb https://www.deb-multimedia.org $VERSION_CODENAME main non-free" | sudo tee -a /etc/apt/sources.list
+    sudo apt-get update -oAcquire::AllowInsecureRepositories=true
+    sudo apt-get install -y --allow-unauthenticated deb-multimedia-keyring
     sudo apt-get update
 fi
 
@@ -76,10 +79,6 @@ install_liquidsoap() {
 
     # bricolage instable mais fonctionnel
     local ASSETS_URL="https://github.com/savonet/liquidsoap/releases/expanded_assets/v$VERSION_LS"
-    if [ "VERSION_CODENAME" = "noble" ]; # plus besoin à partir de LS2.3
-    then
-        VERSION_CODENAME="jammy"
-    fi
     wget -nd -r -l 1 -R '*dbgsym*' -A "liquidsoap_*$ID*$VERSION_CODENAME*$ARCH.deb" "$ASSETS_URL"
 
     local PACKAGE=$(ls -tr liquidsoap*.deb |tail)

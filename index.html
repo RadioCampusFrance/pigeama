@@ -341,8 +341,33 @@
           </li>
         </ol>
       </strong></p>
+
+      <a name="stereotool"></a>
+      <h2>Tests recherchés: Intégrer Stereotool</h2>
+      <p>
+        Si vous utilisez PigeAMA pour envoyer le signal vers Icecast ou autre chose,
+        il est possible d'appliquer Stereotool sur le signal en entrée.
+        Cela n'est pas testé, donc si vous le faites pensez à nous le signaler 
+        (les contacts sont en bas de page).
+        Théoriquement, après avoir créé un fichier de preset il suffirait d'ajouter
+        les lignes suivantes dans le script <code>pige.liq</code>,
+        juste avant la définition des sorties :
+      </p>
+      <pre>entree = stereotool(
+  library_file="/path/to/stereotool/shared/lib",
+  license_key="my_license_key",
+  preset="/path/to/preset/file",
+  entree
+)</pre>
     </div>
     </section>
+
+
+
+
+
+
+
 
     <section class="content" id="aide">
     <div class="container">

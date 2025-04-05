@@ -11,7 +11,7 @@ PigeAMA, pour Pige d'Antenne Marchant Automatiquement
 est un outil d'installation d'une pige d'antenne pensé pour les radios associatives.
 En partant d'un ordinateur sous Linux,
 il installe et configure des logiciels libres :
-          
+
 * [Liquidsoap](https://liquidsoap.info)
 pour enregistrer ce qui arrive dans la carte son,
 découpé en fichiers par heure et en dossiers par jour.

@@ -292,8 +292,10 @@ Dans ce cas, vous pouvez essayer deux variantes de la ligne de l'entrée sonore 
 
 PigeAMA est hébergé par [Sourcehut](https://sr.ht/~martink/pigeama/).
 Vous pouvez suggérer des modifications ou poser des questions à la mailing-list
-de PigeAMA: pour vous inscrire envoyez un e-mail (même vide) à 
-[~martink/pigeama+subscribe@lists.sr.ht](mailto:~martink/pigeama+subscribe@lists.sr.ht)
-
-(si vous souhaitez vous désinscrire plus tard, envoyez un e-mail à
-[~martink/pigeama+unsubscribe@lists.sr.ht](mailto:~martink/pigeama+unsubscribe@lists.sr.ht))
+de PigeAMA: [~martink/pigeama@lists.sr.ht](mailto:~martink/pigeama@lists.sr.ht)
+* Si vous souhaitez recevoir cette mailing-list,
+  ce qui vous pemettra aussi de recevoir des nouvelles du projet
+  envoyez un e-mail (même vide) à 
+  [~martink/pigeama+subscribe@lists.sr.ht](mailto:~martink/pigeama+subscribe@lists.sr.ht)
+* Si vous souhaitez vous désinscrire plus tard, envoyez un e-mail à
+[~martink/pigeama+unsubscribe@lists.sr.ht](mailto:~martink/pigeama+unsubscribe@lists.sr.ht)

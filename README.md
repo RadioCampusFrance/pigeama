@@ -13,8 +13,12 @@ L'installation est expliquée plus en détails sur https://man.sr.ht/~martink/pi
 PigeAMA est un script créé par Martin Kirchgessner et publié sous licence [WTFPL](http://www.wtfpl.net/)
 donc sans aucune garantie : gardez un oeil dessus quand même !
 
-Si vous souhaitez donner un coup de main, pour améliorer le script, son résultat,
-la documentation, ou aider aux installations, n'hésitez pas à faire signe !
-En créant un compte sur Codeberg vous pourrez créer un ticket
-[ici](https://codeberg.org/PigeAMA/PigeAMA/issues/new),
-vous pouvez aussi contacter l'auteur [sur Mastodon](https://piaille.fr/@martin_kirch/).
+PigeAMA est hébergé par [Sourcehut](https://sr.ht/~martink/pigeama/).
+Vous pouvez suggérer des modifications ou poser des questions à la mailing-list
+de PigeAMA: [~martink/pigeama@lists.sr.ht](mailto:~martink/pigeama@lists.sr.ht)
+* Si vous souhaitez recevoir cette mailing-list,
+  ce qui vous pemettra aussi de recevoir des nouvelles du projet
+  envoyez un e-mail (même vide) à 
+  [~martink/pigeama+subscribe@lists.sr.ht](mailto:~martink/pigeama+subscribe@lists.sr.ht)
+* Si vous souhaitez vous désinscrire plus tard, envoyez un e-mail à
+[~martink/pigeama+unsubscribe@lists.sr.ht](mailto:~martink/pigeama+unsubscribe@lists.sr.ht)

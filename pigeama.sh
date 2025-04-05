@@ -18,7 +18,7 @@
 : "${FORMATPIGE:=mp3}"
 
 # Peut être fourni pour essayer avec une autre version de Liquidsoap
-: "${VERSION_LS:=2.3.0}"
+: "${VERSION_LS:=2.3.2}"
 
 ######################## Pré-requis ########################
 set -o errexit

@@ -8,7 +8,7 @@ un fichier sonore par heure (dans un dossier par jour),
 les rendre disponibles via Samba (partage Windows) et HTTP (pour les télécharger avec un navigateur Web).
 Les anciens fichiers seront supprimés automatiquement.
 
-L'installation est expliquée plus en détails sur https://pigeama.codeberg.page/
+L'installation est expliquée plus en détails sur https://man.sr.ht/~martink/pigeama/#pigeama
 
 PigeAMA est un script créé par Martin Kirchgessner et publié sous licence [WTFPL](http://www.wtfpl.net/)
 donc sans aucune garantie : gardez un oeil dessus quand même !

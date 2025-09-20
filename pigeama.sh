@@ -18,7 +18,7 @@
 : "${FORMATPIGE:=mp3}"
 
 # Peut être fourni pour essayer avec une autre version de Liquidsoap
-: "${VERSION_LS:=2.3.2}"
+: "${VERSION_LS:=2.4.0}"
 
 ######################## Pré-requis ########################
 set -o errexit
@@ -79,7 +79,7 @@ install_liquidsoap() {
 
     # bricolage instable mais fonctionnel
     local ASSETS_URL="https://github.com/savonet/liquidsoap/releases/expanded_assets/v$VERSION_LS"
-    wget -nd -r -l 1 -R '*dbgsym*' -A "liquidsoap_*$ID*$VERSION_CODENAME*$ARCH.deb" "$ASSETS_URL"
+    wget -nd -r -l 1 -A "liquidsoap_*$ID*$VERSION_CODENAME*ocaml4*$ARCH.deb" "$ASSETS_URL"
 
     local PACKAGE=$(ls -tr liquidsoap*.deb |tail)
     if [ "$PACKAGE" = "" ];
@@ -149,7 +149,7 @@ output.file(%$ENCODAGE,
     reopen_when = { 0m }
 )
 
-# pour envoyer le flux vers Icecast, retirez les # du bloc suivant, et mettez vos paramètres 
+# pour envoyer le flux vers Icecast, retirez les # du bloc suivant, et mettez vos paramètres
 # output.icecast(
 #     host="serveur.maradio.org",
 #     port=9000,

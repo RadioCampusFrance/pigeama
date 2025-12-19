@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
-######################## 🦄 PigeAMA 🖭 ##########################
-#                                                               #
-# Encore et toujours distribué sans garantie, conformément à la #
-#              WTFPL : http://www.wtfpl.net/                    #
-#                                                               #
-#################################################################
+######################## 🦄 PigeAMA 🖭 #############################
+#                                                                  #
+# Distribué avec amour mais sans garantie, conformément à la WTFPL #
+#                                                                  #
+# Plus d'infos sur https://man.sr.ht/~martink/pigeama/#pigeama     #
+#                                                                  #
+####################################################################
 
 { # le } qui va avec est à la fin du fichier
 

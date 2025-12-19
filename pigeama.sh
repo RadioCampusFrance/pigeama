@@ -71,7 +71,7 @@ then
     sudo apt-get update
 fi
 
-sudo apt-get -q install -y wget ffmpeg alsa-utils
+sudo apt-get -q install -y wget ffmpeg alsa-utils gettext
 
 ######################## Les vraies fonctions et contenus ########################
 
@@ -120,7 +120,7 @@ install_pige() {
             ;;
     esac
 
-    wget -O "$HOME/pige.liq" https://git.sr.ht/~martink/pigeama/blob/main/pige.liq
+    wget -O - https://git.sr.ht/~martink/pigeama/blob/main/pige.liq | envsubst > "$HOME/pige.liq"
 
     mkdir -p "$HOME/.config/systemd/user/"
     cat > "$HOME/.config/systemd/user/pige.service" << END

@@ -129,7 +129,7 @@ Description=Pige d'antenne
 After=network.target
 
 [Service]
-Type=forking
+Type=simple
 PIDFile=$HOME/pige.pid
 WorkingDirectory=$HOME
 ExecStart=`which liquidsoap` $HOME/pige.liq

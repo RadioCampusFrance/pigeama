@@ -14,9 +14,6 @@
 # On commence par quelques réglages de Liquidsoap :
 settings.log.file.set(true)
 settings.log.file.path.set("$HOME/pige.log")
-settings.init.daemon.set(true)
-settings.init.daemon.pidfile.set(true)
-settings.init.daemon.pidfile.path.set("$HOME/pige.pid")
 
 # Sélection de l'entrée sonore :
 entree = input.alsa()

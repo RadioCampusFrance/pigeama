@@ -127,10 +127,10 @@ install_pige() {
     export EXTENSION
     export ENCODAGE
     export PIGE_RACINE
-    wget -O - https://git.sr.ht/~martink/pigeama/blob/magneto/pige.liq.template | envsubst > "$HOME/pige.liq"
+    wget -O - https://git.sr.ht/~martink/pigeama/blob/main/pige.liq.template | envsubst > "$HOME/pige.liq"
 
-    wget -O "$PIGE_RACINE/magneto.html" https://git.sr.ht/~martink/pigeama/blob/magneto/magneto.html
-    wget -O "$PIGE_RACINE/a_propos.html" https://git.sr.ht/~martink/pigeama/blob/magneto/a_propos.html
+    wget -O "$PIGE_RACINE/magneto.html" https://git.sr.ht/~martink/pigeama/blob/main/magneto.html
+    wget -O "$PIGE_RACINE/a_propos.html" https://git.sr.ht/~martink/pigeama/blob/main/a_propos.html
 
     mkdir -p "$HOME/.config/systemd/user/"
     cat > "$HOME/.config/systemd/user/pige.service" << END

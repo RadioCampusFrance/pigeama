@@ -103,7 +103,7 @@ def magneto_post(_) =
         magneto.start()
         log(label="pigeama", "debut d'enregistrement vers #{magneto_en_cours()}")
         http.response(
-            content_type="text/plain; charset=utf-8"",
+            content_type="text/plain; charset=utf-8",
             data="OK"
         )
     end

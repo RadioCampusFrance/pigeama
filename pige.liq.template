@@ -1,0 +1,145 @@
+######################## 🦄 PigeAMA 🖭 #############################
+#                                                                  #
+# Distribué avec amour mais sans garantie, conformément à la WTFPL #
+#                                                                  #
+# Plus d'infos sur https://man.sr.ht/~martink/pigeama/#pigeama     #
+#                                                                  #
+####################################################################
+
+# Ceci est le script Liquidsoap qui écoute la carte son et écrit les fichiers.
+
+# les lignes qui commencent par un # sont des commentaires : elles ne seront pas
+# lues par Liquidsoap, donc on peut y mettre quelques explications.
+
+# On commence par quelques réglages de Liquidsoap :
+settings.log.file.set(true)
+settings.log.file.path.set("$HOME/pige.log")
+
+# Sélection de l'entrée sonore :
+entree = input.alsa()
+
+# Ensuite on créé des sorties.
+# Les formats de sortie sont définis avec un %, par exemple :
+# %flac
+# %wav
+# %mp3(bitrate=192)
+# %mp3.vbr(quality=2, samplerate=48000)
+
+output.file(%$ENCODAGE,
+    { time.string("$PIGE_RACINE/%Y-%m-%d/%Hh%M_%S_%z.$EXTENSION") },
+    entree,
+    reopen_when = { 0m },
+    fallible=true
+)
+
+# pour envoyer le flux vers Icecast, retirez les # du bloc suivant, et mettez vos paramètres
+# output.icecast(
+#     host="serveur.maradio.org",
+#     port=9000,
+#     mount="/pointdemontage",
+#     user="utilisateur",
+#     password="motdepasse",
+#     %$ENCODAGE,
+#     entree
+# )
+
+############## Le Magnetophone ########################################################
+
+MAGNETO_PORT = 8080 # doit être identique à celui dans magneto.html
+MAGNETO_DUREE_MAX = 86400. # en secondes. Le point est important.
+
+magneto_en_cours = ref("vide")
+magneto_debut = ref(0.)
+
+def magneto_fichier() =
+    let nouveau = time.string("$PIGE_RACINE/magneto-%Y-%m-%d-%Hh%M_%S.$EXTENSION")
+    magneto_en_cours := path.basename(nouveau)
+    nouveau
+end
+
+magneto = output.file(%$ENCODAGE,
+    magneto_fichier,
+    entree,
+    start=false,
+    fallible=true
+)
+
+harbor.http.static(
+    port=MAGNETO_PORT,
+    browse=true,
+    "$PIGE_RACINE"
+)
+
+# l'affichage rafraichi chaque second dans l'interface
+def magneto_get(_) =
+    let content = if magneto.is_started() then
+        let elapsed = time() - magneto_debut() + float_of_int(time.zone().utc_diff) # car time.string veut un timestamp UTC
+        let chrono = time.string(time=elapsed, "%Hh %M:%S")
+
+        "#{chrono} - #{magneto_en_cours()} (arrêt automatique à #{MAGNETO_DUREE_MAX}s)"
+    else
+        "OFF"
+    end
+
+    http.response(
+        content_type="text/plain; charset=utf-8",
+        data=content
+    )
+end
+
+harbor.http.register.simple(port=MAGNETO_PORT, method="GET", "/magneto", magneto_get)
+
+# réponse au bouton ENREGISTRER
+def magneto_post(_) =
+    if magneto.is_started() then
+        http.response(
+            status_code=400,
+            status_message="Enregistrement deja en cours",
+            data="Enregistrement déjà en cours"
+        )
+    else
+        magneto.reopen()
+        magneto_debut := time()
+        magneto.start()
+        log(label="pigeama", "debut d'enregistrement vers #{magneto_en_cours()}")
+        http.response(
+            content_type="text/plain; charset=utf-8"",
+            data="OK"
+        )
+    end
+end
+
+harbor.http.register.simple(port=MAGNETO_PORT, method="POST", "/magneto", magneto_post)
+
+# réponse au bouton STOP
+def magneto_delete(_) =
+    if magneto.is_started() then
+        let en_cours = magneto_en_cours()
+        magneto.stop()
+        magneto_debut := 0.
+        log(label="pigeama", "fin d'enregistrement de #{en_cours}")
+
+        http.response(
+            content_type="text/plain; charset=utf-8",
+            data=en_cours
+        )
+    else
+        http.response(
+            status_code=400,
+            status_message="Pas d'enregistrement en cours",
+            data="Pas d'enregistrement en cours"
+        )
+    end
+end
+
+harbor.http.register.simple(port=MAGNETO_PORT, method="DELETE", "/magneto", magneto_delete)
+
+VERIF_DUREE_MAX_TOUTES_LES = 10. # secondes
+def longueur_max() =
+    if magneto.is_started() and (time() - magneto_debut()) > MAGNETO_DUREE_MAX then
+        log(label="pigeama", "ATTENTION le magneto a ete oublie, on applique la duree max d'enregistrement de #{MAGNETO_DUREE_MAX} secondes.")
+        ignore(magneto_delete(""))
+    end
+    VERIF_DUREE_MAX_TOUTES_LES
+end
+thread.run.recurrent(delay=VERIF_DUREE_MAX_TOUTES_LES, longueur_max)

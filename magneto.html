@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<!--
+######################## 🦄 PigeAMA 🖭 #############################
+#                                                                  #
+# Distribué avec amour mais sans garantie, conformément à la WTFPL #
+#                                                                  #
+# Plus d'infos sur https://man.sr.ht/~martink/pigeama/#pigeama     #
+#                                                                  #
+####################################################################
+-->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Magnétophone PigeAMA</title>
+    <style>
+        /* Mode clair (par défaut) */
+        :root {
+        --fond: #ffffff;
+        --texte: #444;
+        --filigrane: #aaa;
+        --liens: #0066ff;
+        }
+        /* Mode breusson */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --fond: #1a1a1a;
+                --texte: #ffffff;
+                --filigrane: #a0a0a0;
+                --liens: #4d94ff;
+            }
+        }
+        body {
+            background: var(--fond);
+            color: var(--texte);
+            line-height: 1.6;
+            font-family: sans-serif;
+            font-size:1.2em;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 10px;
+        }
+        h1,h2 {
+            line-height: 1.2;
+        }
+        button {
+            padding: 0.5em 1em;
+            border: 0.1em solid var(--texte);
+            border-radius: 0.1em;
+        }
+        footer {
+            font-size: 0.8em;
+            color: var(--filigrane);
+            position:absolute;
+            bottom:1em;
+            right:1em;
+        }
+        a, a:visited {
+            color: var(--liens);
+        }
+    </style>
+</head>
+<body>
+    <h1>Le magnétophone de PigeAMA</h1>
+    <p>
+        Les enregistrements sont à télécharger <a href="/">par ici</a>
+        (vous aurez besoin du clic droit, puis "Enregistrer la cible du liens sous...").
+        Ils sont nettoyés automatiquement comme la pige.
+    </p>
+
+    <h2>Magnétophone</h2>
+
+    <p>
+        <span id="encours"></span>
+    </p>
+
+    <p>
+        <button onclick="enregistre()" id="btn_enregistre">
+            Enregistrer
+        </button>
+        <button onclick="stop()" id="btn_stop">
+            STOP
+        </button>
+    </p>
+
+    <div id="reponses"></div>
+
+    <p><a href="/">Anciens enregistrements</a></p>
+
+    <footer>
+        <p>
+            Cette pige utilise
+            <a href="https://man.sr.ht/~martink/pigeama/#pigeama" target="_blank">PigeAMA</a>.
+        </p>
+    </footer>
+
+    <script language="javascript">
+        const MAGNETO_PORT = "8080"; // même valeur que dans pige.liq
+
+        /* cette page peut être fournie à la fois par le serveur web de Liquidsoap
+           et par Apache, mais ne fonctionne que si on discute avec le serveur LS. Donc
+           on commence par s'assurer que nous sommes à bon port: */
+        if (window.location.port != MAGNETO_PORT) {
+            window.location.port = MAGNETO_PORT;
+        }
+
+        var cible = document.getElementById('encours');
+        const btn_enregistre = document.getElementById("btn_enregistre");
+        const btn_stop = document.getElementById("btn_stop");
+
+        function encours() {
+            fetch('/magneto')
+                .then(réponse => {
+                    if (!réponse.ok) {
+                        throw new Error(réponse);
+                    }
+                    return réponse.text();
+                })
+                .then(html => {
+                    cible.innerHTML = html;
+                    if (html == "OFF") {
+                        btn_enregistre.style.display = "block";
+                        btn_enregistre.disabled = false;
+                        btn_stop.style.display = "none";
+                    } else {
+                        btn_stop.style.display = "block";
+                        btn_stop.disabled = false;
+                        btn_enregistre.style.display = "none";
+                    }
+                    setTimeout(encours, 1000);
+                })
+                .catch(error => {
+                    console.error('Ooops:', error);
+                    cible.innerHTML = '<div style="color: red;">On ne capte pas la pige. Rechargez la page ?</div>';
+                });
+        }
+
+        window.onload = encours;
+
+        function enregistre() {
+            btn_enregistre.disabled = true;
+            fetch('/magneto', {method: 'POST'})
+            .then(réponse => {
+                if (!réponse.ok) {
+                    throw new Error(réponse.statusText);
+                }
+            })
+            .catch(error => {
+                console.error('Aïe aïe aïe:', error);
+                cible.innerHTML = '<div style="color: red;">'+error+'</div>';
+            });
+        }
+
+        function stop() {
+            btn_stop.disabled = true;
+            fetch('/magneto', {method: 'DELETE'})
+            .then(réponse => {
+                if (!réponse.ok) {
+                    throw new Error(réponse.statusText);
+                }
+                return réponse.text();
+            })
+            .then(réponse => {
+                const responseDiv = document.createElement('div');
+                const lien = document.createElement('a');
+                lien.href = réponse;
+                lien.innerText = réponse;
+                responseDiv.appendChild(lien);
+                document.getElementById('reponses').prepend(responseDiv);
+            })
+            .catch(error => {
+                console.error('Aïe aïe aïe:', error);
+                cible.innerHTML = '<div style="color: red;">'+error+'</div>';
+            });
+        }
+    </script>
+</body>
+</html>

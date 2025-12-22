@@ -43,6 +43,26 @@ then
     printf "\nImpossible de 'sudo', abandon.\n"
 fi
 
+######################## Interprétation des paramètres ##################
+
+case "$FORMATPIGE" in
+    flac)
+        EXTENSION="flac"
+        ENCODAGE="flac"
+        ;;
+    wav)
+        EXTENSION="wav"
+        ENCODAGE="wav"
+        ;;
+    # ogg)  # HS avec Liquidsoap2.2.1 - essayer avec %ffmpeg ?
+    #     EXTENSION="ogg"
+    #     ENCODAGE="vorbis(samplerate=44100, channels=2, quality=0.3)"
+    #     ;;
+    *) # dans le doute, mp3 !
+        EXTENSION="mp3"
+        ENCODAGE="mp3(bitrate=192)"
+        ;;
+esac
 
 ######################## Environnement ########################
 
@@ -101,26 +121,13 @@ install_liquidsoap() {
 install_pige() {
     printf "\n\n************ 📻  Installation du service de pige ************\n\n"
 
-    case "$FORMATPIGE" in
-        flac)
-            EXTENSION="flac"
-            ENCODAGE="flac"
-            ;;
-        wav)
-            EXTENSION="wav"
-            ENCODAGE="wav"
-            ;;
-        # ogg)  # HS avec Liquidsoap2.2.1 - essayer avec %ffmpeg ?
-        #     EXTENSION="ogg"
-        #     ENCODAGE="vorbis(samplerate=44100, channels=2, quality=0.3)"
-        #     ;;
-        *) # dans le doute, mp3 !
-            EXTENSION="mp3"
-            ENCODAGE="mp3(bitrate=192)"
-            ;;
-    esac
+    export EXTENSION
+    export ENCODAGE
+    export PIGE_RACINE
+    wget -O - https://git.sr.ht/~martink/pigeama/blob/magneto/pige.liq.template | envsubst > "$HOME/pige.liq"
 
-    wget -O - https://git.sr.ht/~martink/pigeama/blob/main/pige.liq | envsubst > "$HOME/pige.liq"
+    wget -O "$PIGE_RACINE/magneto.html" https://git.sr.ht/~martink/pigeama/blob/magneto/magneto.html
+    wget -O "$PIGE_RACINE/a_propos.html" https://git.sr.ht/~martink/pigeama/blob/magneto/a_propos.html
 
     mkdir -p "$HOME/.config/systemd/user/"
     cat > "$HOME/.config/systemd/user/pige.service" << END
@@ -163,7 +170,7 @@ END
 
     cat > "$HOME/nettoyeur_pige.sh" << END
 #!/bin/bash
-find $PIGE_RACINE/* -type f -mtime +$NBJOURS -delete
+find $PIGE_RACINE/* -type f -mtime +$NBJOURS -not -name '*.html' -delete
 find $PIGE_RACINE/* -type d -empty -delete
 END
     chmod +x "$HOME/nettoyeur_pige.sh"
@@ -267,6 +274,12 @@ END
     sudo systemctl restart avahi-daemon
 }
 
+# Camarades Liquidsoappers: si vous utilisez cela depuis un clone des sources, vous
+# pouvez tester la génération d'un script Liquidsoap en commentant la fin du script
+# pour remplacer par un appel à cette fonction:
+test_liq_script() {
+    cat pige.liq.template | envsubst | grep -v 'settings.log.file' > pige_test.liq
+}
 
 install_liquidsoap
 install_pige

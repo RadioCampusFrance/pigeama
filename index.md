@@ -9,6 +9,8 @@ title:"PigeAMA, l'installeur de pige d'antenne pour les radios associatives"
 PigeAMA, pour Pige d'Antenne Marchant Automatiquement
 (mais surtout pour le jeux de mots),
 est un outil d'installation d'une pige d'antenne pensé pour les radios associatives.
+Il intègre aussi une petite page "magnétophone" pour avoir des fichiers
+pré-découpés à la demande.
 En partant d'un ordinateur sous Linux,
 il installe et configure des logiciels libres :
 
@@ -61,7 +63,8 @@ qui sera lié au format de fichiers que vous souhaitez utiliser :
 **PigeAMA est conçu pour être installé sur Linux,
 sur une distribution Debian ou dérivées :
 Ubuntu, Mint, ... tout ce qui utilise `apt`.**
-L'ordinateur doit avoir accès à Internet au moment de l'installation.
+L'ordinateur doit avoir accès à Internet au moment de l'installation 
+(mais pas forcément ensuite).
 
 Pensez à régler la machine pour qu'elle démarre dès qu'elle est reliée au secteur.
 En général c'est une option qui se trouve dans les menus du BIOS,
@@ -78,7 +81,7 @@ Téléchargez l'installeur :
 
 Autorisez l'éxécution de l'installateur :
 
-    wget chmod +x pigeama.sh
+    chmod +x pigeama.sh
 
 C'est parti :
 
@@ -93,6 +96,8 @@ Ci-dessus, nous précisons les deux options possibles :
 * `FORMATPIGE` indique le format des fichiers enregistrés.
   Vous pouvez utiliser `flac`, `wav` ou `mp3`.
   Le MP3 est réglé à 192kbps, vous pourrez modifier cela après l'installation.
+  L'installeur utilisera le même format pour le magnétophone intégré, mais cela sera
+  modifiable aussi.
 
 
 
@@ -150,13 +155,32 @@ par exemple `http://192.168.0.123/`
 Vous pouvez télécharger les fichiers enregistrés via un partage réseau,
 en donnant l'adresse de la machine qui pige.
 
-* Sous Linux, entrez `smb://192.168.0.123/pige`.
+* Sous Linux, entrez `smb://pige.local/pige` ou `smb://192.168.0.123/pige`.
 * Sous Windows, entrez `\\pige\pige` ou `\\192.168.0.123\pige`.
 
 Choisissez l'accès anonyme.
 Cet accès est en lecture seule.
-Nous vous recommandons d'attacher ces disques réseau automatiquement,
-sur tous les ordinateurs de la radio.
+Nous vous recommandons de garder ce dossier en Favori sur tous les ordinateurs de la radio.
+
+## Le magnétophone
+
+A l'adresse [http://pige.local:8080/magneto.html](http://pige.local:8080/magneto.html)
+vous trouverez un magnétophone qui permet d'enregisrer sur demande,
+dans le même format que le reste de la pige.
+L'enregistrement se fait dans la machine qui héberge la pige et les fichiers de piges
+habituels continuent à être enregistrés aussi.
+
+![Capture d'écran d'une fenêtre de navigateur ouverte sur le magnétophone](capture_magneto.png)
+
+Si vous souhaitez utilier ce magnétophone via une autre interface et/ou programmer
+votre propre logique de début et fin d'enregistrement, vous devrez
+trouver un moyen de faire des requêtes HTTP:
+
+ * `POST http://pige.local/magneto` pour démarrer l'enregistrement. Cela répond avec
+   une erreur 400 si l'enregistrement est déjà en cours, ou 200 OK.
+ * `POST http://pige.local/magneto` pour arrêter l'enregistrement. Le texte de la
+   réponse contiendra le nom du fichier qui a été enregistré.
+   S'il n'y avait pas d'enregistrement en cours, le magnéto répond par une erreur 400.
 
 ## Les fichiers installés
 
@@ -178,6 +202,7 @@ peuvent être intéressants si vous souhaitez la modifier ou en cas de problème
   [Liquidsoap](https://liquidsoap.info)
   qui s'occupe de l'enregistrement,
   on en reparle ci-dessous.
+* `magneto.html` est dans le répertoire de la pige: c'est l'interface du magnétophone.
 
 Les services systèmes installés par PigeAMA sont définis par des fichiers
 placés dans le répertoire utilisateur,
@@ -264,6 +289,9 @@ Vous pouvez effectuer les mises à jour habituelles,
 avec `apt update` et `apt upgrade`.
 Vérifiez que ça pige encore correctement après le redémarrage.
 Si ce n'est pas le cas, reprenez l'installation depuis le début.
+
+Si vous avez fait des modifications à la main, pensez à garder séparément une copie
+des fichiers concernés, pour pouvoir rétablir vos modifications après la re-installation.
 
 ## Si les fichiers ne contiennent que du silence
 

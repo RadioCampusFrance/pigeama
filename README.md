@@ -7,6 +7,8 @@ PigeAMA va installer et configurer des logiciels libres pour enregistrer en cont
 un fichier sonore par heure (dans un dossier par jour),
 les rendre disponibles via Samba (partage Windows) et HTTP (pour les télécharger avec un navigateur Web).
 Les anciens fichiers seront supprimés automatiquement.
+Il propose aussi une interface simple pour déclencher des enregistrements à la demande
+en plus de la pige, ce qui peut être pratique pour pré-découper vos émissions à podcaster.
 
 L'installation est expliquée plus en détails sur https://man.sr.ht/~martink/pigeama/#pigeama
 

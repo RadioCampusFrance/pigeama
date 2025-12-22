@@ -99,7 +99,10 @@ install_liquidsoap() {
     printf "\n\n************ 🧴  Installation de LiquidSoap ************\n\n"
 
     # bricolage instable mais fonctionnel
-    local ASSETS_URL="https://github.com/savonet/liquidsoap-release-assets/releases/expanded_assets/v$VERSION_LS"
+    # note: le dépot officiel devrait être https://github.com/savonet/liquidsoap-release-assets,
+    # mais parfois les paquets sont re-compilés avec de nouveaux noms, ce qui créé des
+    # sortes de doublons dans liquidsoap-release-assets, c'est moins pratique
+    local ASSETS_URL="https://github.com/savonet/liquidsoap/releases/expanded_assets/v$VERSION_LS"
     wget -nd -r -l 1 -A "liquidsoap_*$ID*$VERSION_CODENAME*ocaml4*$ARCH.deb" "$ASSETS_URL"
 
     local PACKAGE=$(ls -tr liquidsoap*.deb |tail)

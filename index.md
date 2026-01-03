@@ -314,7 +314,11 @@ Dans ce cas, vous pouvez essayer deux variantes de la ligne de l'entrée sonore 
   Les compteurs commencent à 0, donc l'exemple pointe la première entrée de la deuxième carte son.
   Pour lister les possibilités, utilisez la commande `arecord -l`.
 
+## La mailing-list
 
+Vous pouvez aussi aller voir si la question n'a pas déjà été posée sur
+[la mailing-list](https://lists.sr.ht/~martink/pigeama),
+ou poser votre question.
 
 # Aidez PigeAMA
 

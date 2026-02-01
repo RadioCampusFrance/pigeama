@@ -176,9 +176,9 @@ Si vous souhaitez utilier ce magnétophone via une autre interface et/ou program
 votre propre logique de début et fin d'enregistrement, vous devrez
 trouver un moyen de faire des requêtes HTTP:
 
- * `POST http://pige.local/magneto` pour démarrer l'enregistrement. Cela répond avec
+ * `POST http://pige.local:8080/magneto` pour démarrer l'enregistrement. Cela répond avec
    une erreur 400 si l'enregistrement est déjà en cours, ou 200 OK.
- * `DELETE http://pige.local/magneto` pour arrêter l'enregistrement. Le texte de la
+ * `DELETE http://pige.local:8080/magneto` pour arrêter l'enregistrement. Le texte de la
    réponse contiendra le nom du fichier qui a été enregistré.
    S'il n'y avait pas d'enregistrement en cours, le magnéto répond par une erreur 400.
 

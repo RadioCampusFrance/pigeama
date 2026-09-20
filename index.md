@@ -77,7 +77,7 @@ appuyez sur Entrée à la fin de la ligne.
 
 Téléchargez l'installeur :
 
-    wget https://git.sr.ht/~martink/pigeama/blob/main/pigeama.sh
+    wget https://git.sr.ht/~martink/pigeama/blob/main/src/pigeama.sh
 
 Autorisez l'éxécution de l'installateur :
 
@@ -118,7 +118,7 @@ puis un fichier par heure.
 Seul le fichier en cours d'écriture est ouvert : vous pouvez faire ce que vous voulez des autres.
 Les plus anciens seront effacés automatiquement.
 
-![Capture d'écran des répertoires contenant les fichiers de pige](capture_pige_locale.png)
+![Capture d'écran des répertoires contenant les fichiers de pige](img/capture_pige_locale.png)
 
 Normalement, la pige partage aussi sur le réseau local
 à l'adresse [http://pige.local/](http://pige.local/).
@@ -134,7 +134,7 @@ Vous pouvez l'afficher en tapant la commande
 `ip a show up scope global`,
 ce sont les 4 chiffres après `inet` :
 
-![exemple de résultat de la commande ip, avec l'adresse encadrée](exemple_ip_a.png)
+![exemple de résultat de la commande ip, avec l'adresse encadrée](img/exemple_ip_a.png)
 
 Dans les exemples ci-dessous, nous utiliserons l'adresse 192.168.0.123 :
 à vous de remplacer par la votre.
@@ -147,7 +147,7 @@ en vous rendant sur
 ou à l'adresse de la machine,
 par exemple `http://192.168.0.123/`
 
-![Capture d'écran des répertoires contenant les fichiers de pige, affichés par un navigateur.](capture_pige_web.png)
+![Capture d'écran des répertoires contenant les fichiers de pige, affichés par un navigateur.](img/capture_pige_web.png)
 
 
 ## Accès aux fichiers via le dossier partagé
@@ -170,7 +170,7 @@ dans le même format que le reste de la pige.
 L'enregistrement se fait dans la machine qui héberge la pige et les fichiers de piges
 habituels continuent à être enregistrés aussi.
 
-![Capture d'écran d'une fenêtre de navigateur ouverte sur le magnétophone](capture_magneto.png)
+![Capture d'écran d'une fenêtre de navigateur ouverte sur le magnétophone](img/capture_magneto.png)
 
 Si vous souhaitez utilier ce magnétophone via une autre interface et/ou programmer
 votre propre logique de début et fin d'enregistrement, vous devrez
